@@ -29,9 +29,13 @@ public class ViusicMain extends PApplet {
 	}
 	
 	public void controlEvent(ControlEvent event){
-		if(event.getName() == "Collections"){
-			System.out.println("Collections pressed");
+		switch(event.getName()){
+		case "Collections":
 			sm.drawCollectionMenu();
+			break;
+		case "record":
+			//Start recording
+			break;
 		}
 	}
 }

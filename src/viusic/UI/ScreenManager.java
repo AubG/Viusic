@@ -25,15 +25,25 @@ public class ScreenManager {
 	
 	void setup(){
 		//Font
-		PFont font = parent.createFont("arial", 20);
+		//PFont font = parent.createFont("arial", 20);
 		
-		//Setting up buttons
+		// :: SETTING UP BUTTONS :: 
+		// Collection button
 		cp5.addButton("Collections")
+		.setColorForeground(0)
 		.setColorActive(parent.color(150,150,150))
 	    .setPosition(screenWidth-200,screenHeight-40)
 	    .setSize(200,40)
 	    .setVisible(true)
 	    ;
+		//Record button
+		cp5.addButton("record")
+		.setColorForeground(0)
+		.setColorActive(parent.color(255,0,0))
+		.setPosition((screenWidth/2)-25, screenHeight - 35)
+		.setSize(50,30)
+		.setVisible(true)
+		;
 	}
 	
 	public void drawHomeBar(){
