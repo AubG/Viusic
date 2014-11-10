@@ -10,8 +10,8 @@ import java.util.Random;
 
 public class ViusicMain extends PApplet {
 	 
-	final int screenWidth = 720;
-	final int screenHeight = 540;
+	final int screenWidth = 1280;
+	final int screenHeight = 720;
 	
 	//For random numbers
 	Random rnd = new Random();
@@ -47,6 +47,7 @@ public class ViusicMain extends PApplet {
 		
 		//Temporary Draw Functions
 		background(rand1,rand2,rand3);
+		sm.drawButtonIndicators(false);
 		//sm.drawCurrentCollectionTab();
 		sm.drawHomeBar();
 	}
@@ -57,6 +58,8 @@ public class ViusicMain extends PApplet {
 		timePassed = millis() - lastTime;
 		lastTime += timePassed;
 		sndM.update(timePassed);
+		
+		sm.drawSettingsButton(rand1, rand2, rand3);
 		
 		// User cannot change screen dimensions
 		size(screenWidth,screenHeight);
@@ -74,8 +77,10 @@ public class ViusicMain extends PApplet {
 		}
 		
 		
-		if(key != CODED && !sm.getIsDrawingCollectionMenu())
+		if(key != CODED && !sm.getIsDrawingCollectionMenu()){
+			
 			sndM.playSound(key, true);
+		}
 	}
 	
 	
@@ -93,7 +98,9 @@ public class ViusicMain extends PApplet {
 			//System.out.println("R :: " + rand1 + "\tG :: " + rand2 + "\tB :: " + rand3);
 			background(rand1, rand2, rand3);
 			sm.drawCurrentCollectionTab();
+			sm.drawButtonIndicators(false);
 			sm.drawHomeBar();
+			sm.drawSettingsButton(rand1, rand2, rand3);
 		}
 	}
 	
@@ -109,7 +116,9 @@ public class ViusicMain extends PApplet {
 					background(rand1,rand2,rand3);
 					sm.setIsDrawingCollectionMenu(false);
 					sm.drawCurrentCollectionTab();
+					sm.drawButtonIndicators(false);
 					sm.drawHomeBar();
+					sm.drawSettingsButton(rand1, rand2, rand3);
 				}
 			}
 		}

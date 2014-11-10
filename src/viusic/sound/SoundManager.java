@@ -25,10 +25,11 @@ public class SoundManager {
 	Minim min;
 	AudioPlayer player;
 
+	
 	private boolean recording;
 	private ArrayList<Loop> loops;
 	private Loop currentLoop;
-	private int endTime, currentTime, lastFrameTime;
+	private int currentTime;
 	
 	public SoundManager(PApplet p, Minim m, ScreenManager s){
 		// Passed objects from main, Set to local objects
@@ -56,10 +57,10 @@ public class SoundManager {
 		
 		// Debug key info, path to sound
 		System.out.println("keypressed was " + key);
-		System.out.println("path to sound  ::  " + ((String) currentCollection.get(key)));
+		System.out.println("path to sound  ::  " + currentCollection.get(key));
 		
 		// Get sound from above path, play sound
-		player = min.loadFile((String) currentCollection.get(key));
+		player = min.loadFile(currentCollection.get(key));
 		player.play();
 	}
 	
@@ -79,7 +80,7 @@ public class SoundManager {
 	}
 	
 	// Gets the currentCollection
-	public Collection getCurrentCollection(){
+	public Collection<Integer, String> getCurrentCollection(){
 		return currentCollection;
 	}
 	
@@ -105,11 +106,9 @@ public class SoundManager {
 		}
 		
 	}
+	
 	public void update(int deltaTime){
-		lastFrameTime = currentTime;
 		currentTime += deltaTime;
-		
-		//System.out.println(currentTime / 1000);
 		
 		
 		ArrayList<Integer> sounds;

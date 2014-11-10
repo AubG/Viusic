@@ -2,6 +2,7 @@ package viusic.UI;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
+import processing.core.PImage;
 import viusic.sound.SoundManager;
 import controlP5.ControlP5;
 
@@ -19,6 +20,9 @@ public class ScreenManager {
 	//One Instance of SoundManager, passed from main
 	SoundManager sndM;
 	
+	//Image Storage
+	PImage gear;
+	
 	//Dem Bools
 	boolean drawingCollectionMenu = false;
 	
@@ -33,6 +37,10 @@ public class ScreenManager {
 	void setup(){
 		//Font
 		//PFont font = parent.createFont("arial", 20);
+		
+		//Getting Images
+		gear = parent.loadImage("\\Viusic\\data\\images\\settings_gear.png");
+		
 		
 		// :: SETTING UP BUTTONS :: 
 		// Collection button
@@ -62,6 +70,46 @@ public class ScreenManager {
 		parent.stroke(0);
 		parent.fill(100,100,100);
 		parent.rect(0,screenHeight-40,screenWidth,40);
+	}
+	
+	public void drawSettingsButton(int rand1, int rand2, int rand3){
+		//Load Image of settings button
+		parent.image(gear, 5, screenHeight - 35);
+	}
+	
+	public void drawButtonIndicators(boolean isClicked){
+		
+		int count = 0;
+		
+		for(int i = 0; i < 11; i++){
+			parent.stroke(0);
+			parent.fill(255);
+			parent.ellipse(i*(80) + 50, screenHeight-40, 50, 50);
+		}	
+		
+		parent.fill(0);
+		parent.textAlign(PConstants.CENTER);
+		parent.text("A", count*(80) + 50, screenHeight - 42);
+		count++;
+		parent.text("S", count*(80) + 50, screenHeight - 42);
+		count++;
+		parent.text("D", count*(80) + 50, screenHeight - 42);
+		count++;
+		parent.text("F", count*(80) + 50, screenHeight - 42);
+		count++;
+		parent.text("G", count*(80) + 50, screenHeight - 42);
+		count++;
+		parent.text("H", count*(80) + 50, screenHeight - 42);
+		count++;
+		parent.text("J", count*(80) + 50, screenHeight - 42);
+		count++;
+		parent.text("K", count*(80) + 50, screenHeight - 42);
+		count++;
+		parent.text("L", count*(80) + 50, screenHeight - 42);
+		count++;
+		parent.text(";", count*(80) + 50, screenHeight - 42);
+		count++;
+		parent.text("\'", count*(80) + 50,screenHeight - 42);
 	}
 	
 	public void setIsDrawingCollectionMenu(boolean input){

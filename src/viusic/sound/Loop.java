@@ -37,9 +37,7 @@ public class Loop {
 			//and now, add it to the sounds to be played
 			if(time >= lastTime && time < currentTime){
 				keysToSend.add(new Integer(keys.get(i)));
-
 			}
-
 		}
 		
 		if(currentTime > endTime)
