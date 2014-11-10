@@ -1,5 +1,12 @@
 package viusic.sound;
 
+/*
+ * Currently, this class should only be called once at the beginning of program to load
+ * all of the collections. 
+ * 
+ * Later in program development users should be able to create custom collections and
+ * add them to the collection ArrayList in SoundManager
+ */
 public class DefaultCollectionSetup {
 	static Collection<Integer, String> piano = new Collection<Integer, String>(
 			"piano");

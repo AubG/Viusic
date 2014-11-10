@@ -7,14 +7,12 @@ public class Collection<K, V> {
 	
 	//Collection Info
 	String collectionName;
-	String pathInfo;
 	
 	//Collection Menu Location
 	int posX = 0, posY = 0;
 	
 	Collection(String name){
 		collectionName = name;
-		pathInfo = "\\data\\name\\";
 	}
 	
 	public String getCollectionName(){
@@ -33,11 +31,18 @@ public class Collection<K, V> {
 		sounds.put(key, value);
 	}
 	
+	// Sets position of menu button, easier to check for mouseOver
 	public void setMenuPosition(int x, int y){
 		posX = x;
 		posY = y;
 	}
 	
+	/*
+	 *  Returns true if mouse within bounds
+	 *  Width = 200
+	 *  Height = 40
+	 *  posX and posY vary, passed by drawCollectionMenu() in ScreenManager	 
+	 */
 	public boolean isMouseOver(int mouseX, int mouseY){
 		if(mouseX > posX && mouseX < posX+200){
 			if(mouseY > posY && mouseY < posY+40){

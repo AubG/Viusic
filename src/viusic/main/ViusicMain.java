@@ -51,7 +51,6 @@ public class ViusicMain extends PApplet {
 		
 		// User cannot change screen dimensions
 		size(screenWidth,screenHeight);
-		
 	}
 	
 	public void keyPressed(){
@@ -74,6 +73,7 @@ public class ViusicMain extends PApplet {
 			rand1 = rnd.nextInt(256);
 			rand2 = rnd.nextInt(256);
 			rand3 = rnd.nextInt(256);
+			System.out.println("R :: " + rand1 + "\tG :: " + rand2 + "\tB :: " + rand3);
 			background(rand1, rand2, rand3);
 			sm.drawCurrentCollectionTab();
 			sm.drawHomeBar();
@@ -81,6 +81,7 @@ public class ViusicMain extends PApplet {
 	}
 	
 	public void mouseClicked(){
+		
 		/*
 		 * Checks for mouse clicks in CollectionMenu
 		 * Sets Current Collection to Selected Collection
@@ -97,14 +98,27 @@ public class ViusicMain extends PApplet {
 		}
 	}
 	
+	/*
+	 * Receives events from all controlP5 controllers
+	 * event.getName() returns name of controller which had an event
+	 */
 	public void controlEvent(ControlEvent event){
+		
+		/*
+		 * switch( controller name )
+		 */
 		switch(event.getName()){
+		
+		// Collections Button
 		case "Collections":
+			// Open menu, set boolean (Collection Selection state)
 			sm.setIsDrawingCollectionMenu(true);
 			sm.drawCollectionMenu();
 			break;
+		
+		// Record Button
 		case "record":
-			//Start recording
+			// Start recording
 			break;
 		}
 	}

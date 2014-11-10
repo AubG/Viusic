@@ -59,7 +59,7 @@ public class ScreenManager {
 	
 	public void drawHomeBar(){
 		//Setting up HomeBar
-		parent.noStroke();
+		parent.stroke(0);
 		parent.fill(100,100,100);
 		parent.rect(0,screenHeight-40,screenWidth,40);
 	}
@@ -105,11 +105,13 @@ public class ScreenManager {
 	public void drawCurrentCollectionTab(){
 		//Draw tab for currentCollection
 		if(!drawingCollectionMenu){
+			// Draws current Collection tab
 			parent.stroke(0);
 			parent.fill(200);
 			parent.smooth();
 			parent.ellipse(screenWidth - 101, screenHeight - 28, 210, 75);
 			
+			// Draws Current Collection name inside tab
 			parent.fill(0);
 			parent.textAlign(PConstants.CENTER);
 			parent.textFont(parent.createFont("arial", 12));
