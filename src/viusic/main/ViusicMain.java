@@ -44,12 +44,6 @@ public class ViusicMain extends PApplet {
 		
 		//Temporarily Setting CurrentCollection
 		sndM.setCurrentCollection(0);
-		
-		//Temporary Draw Functions
-		background(rand1,rand2,rand3);
-		sm.drawButtonIndicators(false);
-		//sm.drawCurrentCollectionTab();
-		sm.drawHomeBar();
 	}
 	
 	public void draw(){
@@ -59,14 +53,20 @@ public class ViusicMain extends PApplet {
 		lastTime += timePassed;
 		sndM.update(timePassed);
 		
-		sm.drawSettingsButton(rand1, rand2, rand3);
+		drawUI();
+		
+		if(sm.getIsDrawingSettingsMenu()){
+			sm.drawSettingsMenu();
+		} else if (sm.getIsDrawingSettingsMenu()){
+			
+		}
 		
 		// User cannot change screen dimensions
 		size(screenWidth,screenHeight);
 	}
 	
 	public void keyPressed(){
-		System.out.println(key + " from user " + millis());
+		
 		/*
 		 * Plays sound on keyPressed
 		 * Wont play sound if in CollectionMenu
@@ -78,7 +78,6 @@ public class ViusicMain extends PApplet {
 		
 		
 		if(key != CODED && !sm.getIsDrawingCollectionMenu()){
-			
 			sndM.playSound(key, true);
 		}
 	}
@@ -92,15 +91,10 @@ public class ViusicMain extends PApplet {
 		 * Wont draw anything if in collectionMenu
 		 */
 		if(!sm.getIsDrawingCollectionMenu()){
-			rand1 = rnd.nextInt(256);
-			rand2 = rnd.nextInt(256);
-			rand3 = rnd.nextInt(256);
-			//System.out.println("R :: " + rand1 + "\tG :: " + rand2 + "\tB :: " + rand3);
-			background(rand1, rand2, rand3);
-			sm.drawCurrentCollectionTab();
-			sm.drawButtonIndicators(false);
-			sm.drawHomeBar();
-			sm.drawSettingsButton(rand1, rand2, rand3);
+//			rand1 = rnd.nextInt(256);
+//			rand2 = rnd.nextInt(256);
+//			rand3 = rnd.nextInt(256);
+			System.out.println("R :: " + rand1 + "\tG :: " + rand2 + "\tB :: " + rand3);
 		}
 	}
 	
@@ -113,15 +107,31 @@ public class ViusicMain extends PApplet {
 		if(sm.getIsDrawingCollectionMenu()){
 			for(int i = 0; i < sndM.getCollectionLength(); i++){
 				if(sndM.getCollection(i).isMouseOver(mouseX, mouseY)){
-					background(rand1,rand2,rand3);
 					sm.setIsDrawingCollectionMenu(false);
-					sm.drawCurrentCollectionTab();
-					sm.drawButtonIndicators(false);
-					sm.drawHomeBar();
-					sm.drawSettingsButton(rand1, rand2, rand3);
 				}
 			}
+		} else if(sm.isMouseClickedSettings(mouseX, mouseY)){
+			System.out.println("here");
+			sm.setIsDrawingSettingsMenu(true);
+			sm.drawSettingsMenu();
+		} else {
+			sm.resetSettingsMenu();
+			sm.setIsDrawingCollectionMenu(false);
+			sm.setIsDrawingSettingsMenu(false);
 		}
+	}
+	
+	public void drawUI(){
+		background(rand1,rand2,rand3);
+		sm.drawButtonIndicators(0);
+		
+		if(sm.getIsDrawingCollectionMenu())
+			sm.drawCollectionMenu();
+		else
+			sm.drawCurrentCollectionTab();
+		
+		sm.drawHomeBar();
+		sm.drawSettingsButton();
 	}
 	
 	/*
@@ -139,12 +149,12 @@ public class ViusicMain extends PApplet {
 		case "Collections":
 			// Open menu, set boolean (Collection Selection state)
 			sm.setIsDrawingCollectionMenu(true);
-			sm.drawCollectionMenu();
 			break;
 		
 		// Record Button
 		case "record":
 			// Start recording
+			sndM.toggleRecord();
 			break;
 		}
 	}
