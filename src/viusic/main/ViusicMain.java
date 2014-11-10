@@ -10,8 +10,8 @@ import java.util.Random;
 
 public class ViusicMain extends PApplet {
 	 
-	final int screenWidth = 1280;
-	final int screenHeight = 720;
+	final int screenWidth = 720;
+	final int screenHeight = 540;
 	
 	//For random numbers
 	Random rnd = new Random();
@@ -26,6 +26,10 @@ public class ViusicMain extends PApplet {
 	
 	//Minim
 	Minim min;
+	
+	//Time variables
+	private int timePassed, lastTime;
+	private boolean recording;
 	
 	public void setup(){
 		size(screenWidth,screenHeight);
@@ -49,20 +53,33 @@ public class ViusicMain extends PApplet {
 	
 	public void draw(){
 		
+		//Calculate time for this frame
+		timePassed = millis() - lastTime;
+		lastTime += timePassed;
+		sndM.update(timePassed);
+		
 		// User cannot change screen dimensions
 		size(screenWidth,screenHeight);
 	}
 	
 	public void keyPressed(){
-		
+		System.out.println(key + " from user " + millis());
 		/*
 		 * Plays sound on keyPressed
 		 * Wont play sound if in CollectionMenu
 		 */
+		if(key == 32){
+			sndM.toggleRecord();
+			return;
+		}
+		
+		
 		if(key != CODED && !sm.getIsDrawingCollectionMenu())
-			sndM.playSound(key);
+			sndM.playSound(key, true);
 	}
 	
+	
+
 	public void keyReleased(){
 		
 		/*
@@ -73,7 +90,7 @@ public class ViusicMain extends PApplet {
 			rand1 = rnd.nextInt(256);
 			rand2 = rnd.nextInt(256);
 			rand3 = rnd.nextInt(256);
-			System.out.println("R :: " + rand1 + "\tG :: " + rand2 + "\tB :: " + rand3);
+			//System.out.println("R :: " + rand1 + "\tG :: " + rand2 + "\tB :: " + rand3);
 			background(rand1, rand2, rand3);
 			sm.drawCurrentCollectionTab();
 			sm.drawHomeBar();
@@ -121,5 +138,9 @@ public class ViusicMain extends PApplet {
 			// Start recording
 			break;
 		}
+	}
+	
+	public int getDeltaTime(){
+		return timePassed;
 	}
 }

@@ -20,7 +20,7 @@ public class ScreenManager {
 	SoundManager sndM;
 	
 	//Dem Bools
-	Boolean drawingCollectionMenu = false;
+	boolean drawingCollectionMenu = false;
 	
 	public ScreenManager(PApplet p, ControlP5 c, int s_W, int s_H){
 		parent = p;
