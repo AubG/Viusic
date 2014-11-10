@@ -63,7 +63,6 @@ public class SoundManager {
 		sm.drawButtonIndicators(key);
 		sm.drawCurrentCollectionTab();
 		sm.drawHomeBar();
-		sm.drawSettingsButton();
 		
 		// Get sound from above path, play sound
 		player = min.loadFile(currentCollection.get(key));

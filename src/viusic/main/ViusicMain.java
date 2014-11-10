@@ -1,6 +1,7 @@
 package viusic.main;
 
 import processing.core.PApplet;
+import processing.event.MouseEvent;
 import viusic.UI.ScreenManager;
 import viusic.sound.SoundManager;
 import controlP5.ControlEvent;
@@ -10,8 +11,8 @@ import java.util.Random;
 
 public class ViusicMain extends PApplet {
 	 
-	final int screenWidth = 1280;
-	final int screenHeight = 720;
+	final int screenWidth = 720;
+	final int screenHeight = 540;
 	
 	//For random numbers
 	Random rnd = new Random();
@@ -22,7 +23,7 @@ public class ViusicMain extends PApplet {
 	SoundManager sndM;
 	
 	//ControlP5
-	ControlP5 cp5;
+	public ControlP5 cp5;
 	
 	//Minim
 	Minim min;
@@ -53,13 +54,15 @@ public class ViusicMain extends PApplet {
 		lastTime += timePassed;
 		sndM.update(timePassed);
 		
-		drawUI();
 		
+		drawUI();
+		sm.updateObjects(timePassed);
+
+		//Send sm mouse Input
+		sm.mousePosition(mouseX, mouseY);
 		if(sm.getIsDrawingSettingsMenu()){
 			sm.drawSettingsMenu();
-		} else if (sm.getIsDrawingSettingsMenu()){
-			
-		}
+		} 
 		
 		// User cannot change screen dimensions
 		size(screenWidth,screenHeight);
@@ -104,21 +107,24 @@ public class ViusicMain extends PApplet {
 		 * Checks for mouse clicks in CollectionMenu
 		 * Sets Current Collection to Selected Collection
 		 */
+		sm.mouseClicked(mouseX, mouseY);
 		if(sm.getIsDrawingCollectionMenu()){
 			for(int i = 0; i < sndM.getCollectionLength(); i++){
 				if(sndM.getCollection(i).isMouseOver(mouseX, mouseY)){
 					sm.setIsDrawingCollectionMenu(false);
 				}
 			}
-		} else if(sm.isMouseClickedSettings(mouseX, mouseY)){
-			System.out.println("here");
-			sm.setIsDrawingSettingsMenu(true);
-			sm.drawSettingsMenu();
-		} else {
+		} 
+			
+		 /*else {
 			sm.resetSettingsMenu();
 			sm.setIsDrawingCollectionMenu(false);
 			sm.setIsDrawingSettingsMenu(false);
-		}
+		}*/
+	}
+	@Override
+	public void mouseReleased(MouseEvent event) {
+		sm.mouseReleased(event.getX(), event.getY());
 	}
 	
 	public void drawUI(){
@@ -131,7 +137,7 @@ public class ViusicMain extends PApplet {
 			sm.drawCurrentCollectionTab();
 		
 		sm.drawHomeBar();
-		sm.drawSettingsButton();
+		sm.drawSettingsButton(timePassed);
 	}
 	
 	/*
@@ -155,6 +161,17 @@ public class ViusicMain extends PApplet {
 		case "record":
 			// Start recording
 			sndM.toggleRecord();
+			break;
+		case "gear":
+			System.out.println("oaetuaoetuh");
+			if(!sm.getIsDrawingSettingsMenu()){
+				sm.setIsDrawingSettingsMenu(true);
+				sm.drawSettingsMenu();
+			}else{
+				sm.resetSettingsMenu();
+				sm.setIsDrawingCollectionMenu(false);
+				sm.setIsDrawingSettingsMenu(false);
+			}
 			break;
 		}
 	}

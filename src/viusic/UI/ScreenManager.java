@@ -1,10 +1,13 @@
 package viusic.UI;
 
-import processing.core.PApplet;
+import java.util.ArrayList;
+
+import controlP5.ControlP5;
+
 import processing.core.PConstants;
 import processing.core.PImage;
+import viusic.main.ViusicMain;
 import viusic.sound.SoundManager;
-import controlP5.ControlP5;
 
 public class ScreenManager {
 	
@@ -12,7 +15,7 @@ public class ScreenManager {
 	int screenWidth, screenHeight;
 	
 	//One instance of PApplet, passed from main
-	PApplet parent;
+	ViusicMain parent;
 	
 	//One instance of controlP5 passed from main
 	ControlP5 cp5;
@@ -20,8 +23,9 @@ public class ScreenManager {
 	//One Instance of SoundManager, passed from main
 	SoundManager sndM;
 	
-	//Image Storage
-	PImage gear;
+	//Arraylist of Screen Objects
+	private ArrayList<ImageButton> screenObjects;
+	
 	
 	//Dem Bools
 	boolean drawingCollectionMenu = false;
@@ -30,7 +34,7 @@ public class ScreenManager {
 	//SettingsMenu Movement Variables
 	int s_posX = 20, s_posY;
 	
-	public ScreenManager(PApplet p, ControlP5 c, int s_W, int s_H){
+	public ScreenManager(ViusicMain p, ControlP5 c, int s_W, int s_H){
 		parent = p;
 		cp5 = c;
 		screenWidth = s_W;
@@ -42,9 +46,21 @@ public class ScreenManager {
 	void setup(){
 		//Font
 		//PFont font = parent.createFont("arial", 20);
-		
+		screenObjects = new ArrayList<ImageButton>();
 		//Getting Images
-		gear = parent.loadImage("\\Viusic\\data\\images\\settings_gear.png");
+		PImage [] images = { parent.loadImage("\\Viusic\\data\\images\\settings_gear.png"), //Image 1
+				parent.loadImage("\\Viusic\\data\\images\\settings_gear.png"),//Image 2
+				parent.loadImage("\\Viusic\\data\\images\\settings_gear.png")};//Image 3
+		
+		
+		screenObjects.add(new ImageButton(parent, images, "gear", 5, screenHeight - 35, 1){
+			@Override
+			public void onMousePress(int x, int y) {
+				if(!getIsDrawingSettingsMenu())
+					setIsDrawingSettingsMenu(true);
+				
+			}
+		});
 		
 		
 		// :: SETTING UP BUTTONS :: 
@@ -79,12 +95,12 @@ public class ScreenManager {
 		parent.rect(0,screenHeight-40,screenWidth,40);
 	}
 	
-	public void drawSettingsButton(){
+	public void drawSettingsButton(int deltaTime){
 		//Load Image of settings button
-		parent.image(gear, 5, screenHeight - 35);
+		//gear.update(deltaTime);
 	}
 	
-	public boolean isMouseClickedSettings(int x, int y){
+	/*public boolean isMouseClickedSettings(int x, int y){
 		if(x > 5 && x < 35){
 			if(y > screenHeight - 35 && y < screenHeight - 5){
 				return true;
@@ -92,7 +108,7 @@ public class ScreenManager {
 		}
 		
 		return false;
-	}
+	}*/
 	
 	public void drawSettingsMenu(){
 		parent.stroke(0);
@@ -298,5 +314,28 @@ public class ScreenManager {
 		}
 		
 		parent.strokeWeight(1);
+	}
+
+	//Mouse Events
+	public void mouseClicked(int mouseX, int mouseY) {
+		for(ImageButton obj : screenObjects){
+			obj.mousePressed(mouseX, mouseY);
+		}
+	}
+	public void mouseReleased(int mouseX, int mouseY) {
+		for(ImageButton obj : screenObjects){
+			obj.mouseReleased(mouseX, mouseY);
+		}
+	}
+	public void mousePosition(int mouseX, int mouseY){
+		for(ImageButton obj : screenObjects){
+			obj.mouseOver(mouseX, mouseY);
+		}
+	}
+
+	public void updateObjects(int deltaTime) {
+		for(ImageButton obj : screenObjects){
+			obj.update(deltaTime);
+		}
 	}
 }
