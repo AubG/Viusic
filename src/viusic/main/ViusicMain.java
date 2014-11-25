@@ -1,18 +1,20 @@
 package viusic.main;
 
+import java.util.Random;
+
 import processing.core.PApplet;
 import processing.event.MouseEvent;
+import processing.video.Movie;
 import viusic.UI.ScreenManager;
-import viusic.sound.SoundManager;
+import viusic.media.SoundManager;
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import ddf.minim.Minim;
-import java.util.Random;
 
 public class ViusicMain extends PApplet {
 	 
-	final int screenWidth = 720;
-	final int screenHeight = 540;
+	final int screenWidth = 1280;
+	final int screenHeight = 720;
 	
 	//For random numbers
 	Random rnd = new Random();
@@ -31,6 +33,10 @@ public class ViusicMain extends PApplet {
 	//Time variables
 	private int timePassed, lastTime;
 	private boolean recording;
+	
+	//Movie Testing
+	Movie theMov;
+	boolean playing;
 	
 	public void setup(){
 		size(screenWidth,screenHeight);
@@ -79,9 +85,16 @@ public class ViusicMain extends PApplet {
 			return;
 		}
 		
-		
-		if(key != CODED && !sm.getIsDrawingCollectionMenu()){
+		//Movie testing
+		if( keyCode == UP){
+			System.out.println("Video On");
+			theMov = new Movie(this, System.getProperty("user.dir") + "/viusic/data/videos/skullShuffle.mp4");
+			theMov.play();
+			playing = true;
+			
+		} else if (key != CODED && !sm.getIsDrawingCollectionMenu()){
 			sndM.playSound(key, true);
+			drawUI(key);
 		}
 	}
 	
@@ -90,7 +103,7 @@ public class ViusicMain extends PApplet {
 	public void keyReleased(){
 		
 		/*
-		 * Draws on keyReleased
+		 * Sets new random Background Color on keyReleased
 		 * Wont draw anything if in collectionMenu
 		 */
 		if(!sm.getIsDrawingCollectionMenu()){
@@ -122,6 +135,7 @@ public class ViusicMain extends PApplet {
 			sm.setIsDrawingSettingsMenu(false);
 		}*/
 	}
+	
 	@Override
 	public void mouseReleased(MouseEvent event) {
 		sm.mouseReleased(event.getX(), event.getY());
@@ -129,6 +143,11 @@ public class ViusicMain extends PApplet {
 	
 	public void drawUI(){
 		background(rand1,rand2,rand3);
+		
+		//Movie testing
+		if(playing)
+		image(theMov, 0,0);
+		
 		sm.drawButtonIndicators(0);
 		
 		if(sm.getIsDrawingCollectionMenu())
@@ -137,7 +156,20 @@ public class ViusicMain extends PApplet {
 			sm.drawCurrentCollectionTab();
 		
 		sm.drawHomeBar();
-		sm.drawSettingsButton(timePassed);
+		sm.updateObjects(timePassed);
+	}
+	
+	public void drawUI(int key){
+		background(rand1,rand2,rand3);
+		sm.drawButtonIndicators(key);
+		
+		if(sm.getIsDrawingCollectionMenu())
+			sm.drawCollectionMenu();
+		else
+			sm.drawCurrentCollectionTab();
+		
+		sm.drawHomeBar();
+		sm.updateObjects(timePassed);
 	}
 	
 	/*
@@ -162,14 +194,14 @@ public class ViusicMain extends PApplet {
 			// Start recording
 			sndM.toggleRecord();
 			break;
+		
+		//Settings Menu Button
 		case "gear":
-			System.out.println("oaetuaoetuh");
 			if(!sm.getIsDrawingSettingsMenu()){
 				sm.setIsDrawingSettingsMenu(true);
 				sm.drawSettingsMenu();
 			}else{
 				sm.resetSettingsMenu();
-				sm.setIsDrawingCollectionMenu(false);
 				sm.setIsDrawingSettingsMenu(false);
 			}
 			break;
@@ -178,5 +210,9 @@ public class ViusicMain extends PApplet {
 	
 	public int getDeltaTime(){
 		return timePassed;
+	}
+	
+	public void movieEvent(Movie m){
+		m.read();
 	}
 }

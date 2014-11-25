@@ -3,11 +3,10 @@ package viusic.UI;
 import java.util.ArrayList;
 
 import controlP5.ControlP5;
-
 import processing.core.PConstants;
 import processing.core.PImage;
 import viusic.main.ViusicMain;
-import viusic.sound.SoundManager;
+import viusic.media.SoundManager;
 
 public class ScreenManager {
 	
@@ -32,7 +31,7 @@ public class ScreenManager {
 	boolean drawingSettingsMenu = false;
 	
 	//SettingsMenu Movement Variables
-	int s_posX = 20, s_posY;
+	int s_posX = 45, s_posY;
 	
 	public ScreenManager(ViusicMain p, ControlP5 c, int s_W, int s_H){
 		parent = p;
@@ -58,6 +57,8 @@ public class ScreenManager {
 			public void onMousePress(int x, int y) {
 				if(!getIsDrawingSettingsMenu())
 					setIsDrawingSettingsMenu(true);
+				else 
+					setIsDrawingSettingsMenu(false);
 				
 			}
 		});
@@ -100,26 +101,22 @@ public class ScreenManager {
 		//gear.update(deltaTime);
 	}
 	
-	/*public boolean isMouseClickedSettings(int x, int y){
-		if(x > 5 && x < 35){
-			if(y > screenHeight - 35 && y < screenHeight - 5){
-				return true;
-			}
-		}
-		
-		return false;
-	}*/
-	
 	public void drawSettingsMenu(){
 		parent.stroke(0);
 		parent.fill(100);
 		parent.rect(s_posX, s_posY, 400, screenHeight/2+100);
 		
 		if(s_posY >= screenHeight/2) s_posY -= 20;
+		else {
+			
+			// Draw settings menu buttons & tabs
+			// i.e :: tabs for video, sound, keyboard etc
+			
+		}
 	}
 	
 	public void resetSettingsMenu(){
-		s_posX = 20;
+		s_posX = 45;
 		s_posY = screenHeight;
 	}
 	
@@ -134,7 +131,7 @@ public class ScreenManager {
 	public void drawButtonIndicators(int key){
 		
 		int count = 0;
-		int movement = screenHeight - key*3;
+		int movement = screenHeight-40;
 		
 		for(int i = 0; i < 11; i++){
 			parent.stroke(0);
@@ -322,11 +319,13 @@ public class ScreenManager {
 			obj.mousePressed(mouseX, mouseY);
 		}
 	}
+	
 	public void mouseReleased(int mouseX, int mouseY) {
 		for(ImageButton obj : screenObjects){
 			obj.mouseReleased(mouseX, mouseY);
 		}
 	}
+	
 	public void mousePosition(int mouseX, int mouseY){
 		for(ImageButton obj : screenObjects){
 			obj.mouseOver(mouseX, mouseY);

@@ -10,5 +10,8 @@
 	<classpathentry kind="lib" path="mp3spi1.9.4.jar"/>
 	<classpathentry kind="lib" path="tritonus_aos.jar"/>
 	<classpathentry kind="lib" path="tritonus_share.jar"/>
+	<classpathentry kind="lib" path="jna.jar"/>
+	<classpathentry kind="lib" path="video.jar"/>
+	<classpathentry kind="lib" path="gstreamer-java.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
