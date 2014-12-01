@@ -31,14 +31,13 @@ public class ScreenManager {
 	boolean drawingSettingsMenu = false;
 	
 	//SettingsMenu Movement Variables
-	int s_posX = 45, s_posY;
+	SettingsMenu setMenu;
 	
 	public ScreenManager(ViusicMain p, ControlP5 c, int s_W, int s_H){
 		parent = p;
 		cp5 = c;
 		screenWidth = s_W;
 		screenHeight = s_H;
-		s_posY = screenHeight;
 		setup();
 	}
 	
@@ -63,6 +62,8 @@ public class ScreenManager {
 			}
 		});
 		
+		//Creating Settings menu
+		setMenu = new SettingsMenu(parent, sndM, screenHeight, screenWidth);
 		
 		// :: SETTING UP BUTTONS :: 
 		// Collection button
@@ -85,6 +86,10 @@ public class ScreenManager {
 		;
 	}
 	
+	public void passName(String input){
+		setMenu.setNewCollectionName(input);
+	}
+	
 	public void giveSoundManager(SoundManager s){
 		sndM = s;
 	}
@@ -95,33 +100,18 @@ public class ScreenManager {
 		parent.fill(100);
 		parent.rect(0,screenHeight-40,screenWidth,40);
 	}
-	
-	public void drawSettingsButton(int deltaTime){
-		//Load Image of settings button
-		//gear.update(deltaTime);
-	}
-	
+
 	public void drawSettingsMenu(){
-		parent.stroke(0);
-		parent.fill(100);
-		parent.rect(s_posX, s_posY, 400, screenHeight/2+100);
-		
-		if(s_posY >= screenHeight/2) s_posY -= 20;
-		else {
-			
-			// Draw settings menu buttons & tabs
-			// i.e :: tabs for video, sound, keyboard etc
-			
-		}
+		if(drawingSettingsMenu)
+			setMenu.drawWindow();
 	}
-	
-	public void resetSettingsMenu(){
-		s_posX = 45;
-		s_posY = screenHeight;
-	}
-	
-	public void setIsDrawingSettingsMenu(boolean input){
+
+ 	public void setIsDrawingSettingsMenu(boolean input){
 		drawingSettingsMenu = input;
+		
+		if(!input){
+			setMenu.resetMenuPosition();
+		}
 	}
 	
 	public boolean getIsDrawingSettingsMenu(){
@@ -254,7 +244,7 @@ public class ScreenManager {
 		// Reseting the strokeWeight back to default
 		parent.strokeWeight(1);
 	}
-	
+
 	public void setIsDrawingCollectionMenu(boolean input){
 		drawingCollectionMenu = input;
 	}
@@ -318,6 +308,10 @@ public class ScreenManager {
 		for(ImageButton obj : screenObjects){
 			obj.mousePressed(mouseX, mouseY);
 		}
+		
+		if(drawingSettingsMenu){
+			setMenu.tabsClickCheck(mouseX, mouseY);
+		}
 	}
 	
 	public void mouseReleased(int mouseX, int mouseY) {
@@ -336,5 +330,13 @@ public class ScreenManager {
 		for(ImageButton obj : screenObjects){
 			obj.update(deltaTime);
 		}
+	}
+
+	public boolean getIsSettingKey() {
+		return setMenu.getIsSettingKey();
+	}
+
+	public void passKey(char key) {
+		setMenu.setKey(key);
 	}
 }

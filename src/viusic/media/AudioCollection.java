@@ -11,7 +11,7 @@ public class AudioCollection<K, V> {
 	//Collection Menu Location
 	int posX = 0, posY = 0;
 	
-	AudioCollection(String name){
+	public AudioCollection(String name){
 		collectionName = name;
 	}
 	
@@ -29,6 +29,11 @@ public class AudioCollection<K, V> {
 	
 	public void set(K key, V value){
 		sounds.put(key, value);
+	}
+	
+	public void changeKey(K oldKey, K newKey, V value){
+		sounds.remove(oldKey);
+		sounds.put(newKey, value);
 	}
 	
 	// Sets position of menu button, easier to check for mouseOver

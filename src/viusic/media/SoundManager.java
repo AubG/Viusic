@@ -59,12 +59,6 @@ public class SoundManager {
 		System.out.println("keypressed was " + key);
 		System.out.println("path to sound  ::  " + currentCollection.get(key));
 		
-		//Draw Button Indicator & menuBar
-//		sm.drawButtonIndicators(key);
-//		sm.drawCurrentCollectionTab();
-//		sm.drawHomeBar();
-		
-		
 		// Get sound from above path, play sound
 		player = min.loadFile(currentCollection.get(key));
 		player.play();

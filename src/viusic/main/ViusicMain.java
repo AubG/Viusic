@@ -92,14 +92,14 @@ public class ViusicMain extends PApplet {
 			theMov.play();
 			playing = true;
 			
-		} else if (key != CODED && !sm.getIsDrawingCollectionMenu()){
+		} else if (key != CODED && !sm.getIsDrawingCollectionMenu() && !sm.getIsDrawingSettingsMenu()){
 			sndM.playSound(key, true);
 			drawUI(key);
+		} else if (sm.getIsSettingKey()){
+			sm.passKey(key);
 		}
 	}
 	
-	
-
 	public void keyReleased(){
 		
 		/*
@@ -201,10 +201,13 @@ public class ViusicMain extends PApplet {
 				sm.setIsDrawingSettingsMenu(true);
 				sm.drawSettingsMenu();
 			}else{
-				sm.resetSettingsMenu();
+				// Fix the settings menu
+				//sm.resetSettingsMenu();
 				sm.setIsDrawingSettingsMenu(false);
 			}
 			break;
+		case "collectionName":
+			sm.passName(event.getStringValue());
 		}
 	}
 	
