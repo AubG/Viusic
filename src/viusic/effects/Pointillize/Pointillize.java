@@ -42,7 +42,7 @@ public class Pointillize
 		windowW = img.width;
 		windowH = img.height;
 		
-		// adjust the parent's applet's window dimensions
+		// adjust the parent applet's window dimensions
 		master.size(windowW, windowH);
 		 
 		// update the parent applet's background color
