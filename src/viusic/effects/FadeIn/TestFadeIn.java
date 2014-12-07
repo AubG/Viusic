@@ -14,8 +14,6 @@ public class TestFadeIn extends PApplet
 	{
 		size(600, 400);
 		
-		System.out.println(System.getProperty("user.dir"));
-		
 		startImage = System.getProperty("user.dir") + "/viusic/data/images/earth.jpg";
 		endImage = System.getProperty("user.dir") + "/viusic/data/images/apollo-landing.jpg";
 
