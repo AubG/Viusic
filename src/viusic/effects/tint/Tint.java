@@ -18,8 +18,8 @@ public class Tint
 	 * @param  {Integer}  cm    colorMode: 1 for RGB, 3 for HSB
 	 * @param  {Float}    op    image opacity 
 	 * @param  {Float}    v1    refers to the RED or HUE value depending on the colorMode
-	 * @param  {Float}    v2    refers to the GREEN or BRIGHTNESS value depending on the colorMode
-	 * @param  {Float}    v3    refers to the BLUE or VIBRANCY value depending on the colorMode
+	 * @param  {Float}    v2    refers to the GREEN or SATURATION value depending on the colorMode
+	 * @param  {Float}    v3    refers to the BLUE or BRIGHTNESS value depending on the colorMode
 	 */
 	public Tint (PApplet papp, int cm, float op, float v1, float v2, float v3)
 	{	
