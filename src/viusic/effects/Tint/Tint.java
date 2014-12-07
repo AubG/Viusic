@@ -1,4 +1,4 @@
-package viusic.effects.tint;
+package viusic.effects.Tint;
 
 import processing.core.PApplet;
 
