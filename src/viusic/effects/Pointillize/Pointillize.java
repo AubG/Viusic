@@ -35,13 +35,17 @@ public class Pointillize
 	{	
 		int windowW, windowH;
 		
+		// load image 
 		img = master.loadImage(filepath);
-		  
+		 
+		// window dimensions
 		windowW = img.width;
 		windowH = img.height;
-		  
+		
+		// adjust the parent's applet's window dimensions
 		master.size(windowW, windowH);
-		  
+		 
+		// update the parent applet's background color
 		master.background(backgroundColor);
 	}
 	
@@ -51,10 +55,11 @@ public class Pointillize
 	{
 		int x, y, point;
 		  
-		// Pick a random point
+		// Pick a random point w/in the image
 		x = (int) (master.random(img.width));
 		y = (int) (master.random(img.height));
 		
+		// adjust for single dimension array storage
 		point = x + y * img.width;
 	  
 		float r, g, b;
