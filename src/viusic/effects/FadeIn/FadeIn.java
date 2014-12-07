@@ -10,14 +10,14 @@ public class FadeIn
 	double velocity, x;
 
 
-  /**
-   * Constructor
-   *
-   * @param  {PApplet}  master       references the parent processing applet
-   * @param  {String}   startImage   the image visible at the beginning of the transition
-   * @param  {String}   targetImage  the image visible at the end of the transition
-   * @param  {double}   v            the velocity (rate) in which the transition occurs, ranging from 0.0 - 1.0
-   */
+	/**
+	 * Constructor
+	 *
+	 * @param  {PApplet}  master       references the parent processing applet
+	 * @param  {String}   startImage   the image visible at the beginning of the transition
+	 * @param  {String}   targetImage  the image visible at the end of the transition
+	 * @param  {double}   v            the velocity (rate) in which the transition occurs, ranging from 0.0 - 1.0
+	 */
 	public FadeIn (PApplet master, String startImage, String targetImage, double v)
 	{
 		this.master = master;
@@ -27,9 +27,9 @@ public class FadeIn
 	}
 
 
-  /**
-   * Initialize the first image's visibility
-   */
+      /**
+       * Initialize the first image's visibility
+       */
 	public void setup ()
 	{
 		master.image(startImage, 0, 0);
@@ -37,9 +37,9 @@ public class FadeIn
 	}
 
 
-  /**
-   * Transform the opacities of the starting and ending images over a function of time
-   */
+      /**
+       * Transform the opacities of the starting and ending images over a function of time
+       */
 	public void draw ()
 	{
 		// tint from 255 to 0 for the top image
