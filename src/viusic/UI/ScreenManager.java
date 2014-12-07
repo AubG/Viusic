@@ -7,6 +7,7 @@ import org.gstreamer.media.event.StopEvent;
 import processing.core.PConstants;
 import processing.core.PImage;
 import viusic.main.ViusicMain;
+import viusic.media.Loop;
 import viusic.media.SoundManager;
 import controlP5.ControlP5;
 
@@ -34,6 +35,9 @@ public class ScreenManager {
 	
 	//SettingsMenu Movement Variables
 	SettingsMenu setMenu;
+
+	private LoopMenu loopMenu;
+
 	
 	public ScreenManager(ViusicMain p, ControlP5 c, int s_W, int s_H){
 		parent = p;
@@ -313,9 +317,14 @@ public class ScreenManager {
 	public void mouseClicked(int mouseX, int mouseY) {
 		
 		for(int i = 0; i < screenObjects.size(); i++){
+			
 			ImageButton obj = screenObjects.get(i);
 			obj.mousePressed(mouseX, mouseY);
 		}
+		
+		if(parent.loopMenuOpen)
+			loopMenu.mousePress(mouseX, mouseY);
+		
 		
 		if(drawingSettingsMenu){
 			setMenu.tabsClickCheck(mouseX, mouseY);
@@ -323,6 +332,7 @@ public class ScreenManager {
 	}
 	
 	public void mouseReleased(int mouseX, int mouseY) {
+		
 		for(ImageButton obj : screenObjects){
 			obj.mouseReleased(mouseX, mouseY);
 		}
@@ -338,6 +348,10 @@ public class ScreenManager {
 		for(ImageButton obj : screenObjects){
 			obj.update(deltaTime);
 		}
+		
+		if(loopMenu != null){
+			loopMenu.update(deltaTime);
+		}
 	}
 
 	public boolean getIsSettingKey() {
@@ -346,5 +360,33 @@ public class ScreenManager {
 
 	public void passKey(char key) {
 		setMenu.setKey(key);
+	}
+
+	public void addLoop(int loopNum) {
+		ImageButton loopImage = new ImageButton(parent, "Loop " + loopNum, 50 + (loopNum - 1) * 120, screenHeight - 32, 100, 25, 1){
+
+			@Override
+			public void onMousePress(int x, int y) {
+				if(!parent.loopMenuOpen){
+					loopMenu(sndM.getLoop(getNumber() - 1), getNumber() - 1);
+				}
+			}
+		};
+		loopImage.setNumber(loopNum);
+		
+		screenObjects.add(loopImage);
+		
+	}
+	public void loopMenu(Loop loop, int i){
+		
+		parent.loopMenuOpen = true;
+		loopMenu = new LoopMenu(parent, this, loop, i);
+		
+		
+		
+	}
+
+	public void passToLoopMenu(String button, String stringValue) {
+		loopMenu.setValue(button, stringValue);
 	}
 }

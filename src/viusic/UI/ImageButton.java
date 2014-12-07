@@ -19,14 +19,15 @@ public class ImageButton {
 	private PImage[] images;
 	private boolean animating;
 	private ViusicMain main;
-	private String text;
+	protected String text;
 
 	// For Tweening
 	private float targetScale;
 	private int targetX, targetY;
 	private boolean looping;
 	private boolean buttonMode;
-
+	private int number;
+	private int r, g, b;
 	public ImageButton(ViusicMain main, String text, int x, int y, int width, int height,
 			float scale) {
 		init(main, text, null, x, y, width, height, scale);
@@ -69,6 +70,7 @@ public class ImageButton {
 			float scale) {
 		// Variables for controlling size
 		this.main = main;
+		r = 175; g = 175; b = 175;
 		
 		// Determining size of image
 		this.width = width;
@@ -163,7 +165,7 @@ public class ImageButton {
 			main.image(images[currentIndex], x, y, width * scale, height
 					* scale);
 		} else {
-			main.fill(175);
+			main.fill(r, g, b);
 			main.stroke(0);
 
 			main.rect(bounds.x, bounds.y, bounds.width, bounds.height);
@@ -212,6 +214,20 @@ public class ImageButton {
 	public int getTargetX() {
 		return targetX;
 	}
+	
+	public void setX(int x){
+		this.x = x;
+	}
+	public void setY(int y){
+		this.y = y;
+	}
+	
+	public int getX(){
+		return x;
+	}
+	public int getY(){
+		return y;
+	}
 
 	public int getTargetY() {
 		return targetY;
@@ -233,5 +249,16 @@ public class ImageButton {
 	public String getText() {
 
 		return text;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
+	public int getNumber(){
+		return number;
+	}
+
+	public void setColor(int r, int g, int b) {
+		this.r = r; this.g = g; this.b = b;
 	}
 }

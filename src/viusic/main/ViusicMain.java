@@ -5,6 +5,7 @@ import java.util.Random;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 import processing.video.Movie;
+import viusic.UI.LoopMenu;
 import viusic.UI.ScreenManager;
 import viusic.media.Collection;
 import viusic.media.DefaultCollectionSetup;
@@ -17,8 +18,8 @@ import ddf.minim.Minim;
 public class ViusicMain extends PApplet {
 
 	// Default resolution (Subject to change)
-	final int screenWidth = 1280;
-	final int screenHeight = 720;
+	public static final int screenWidth = 1280;
+	public static final int screenHeight = 720;
 
 	// For random numbers
 	Random rnd = new Random();
@@ -44,6 +45,9 @@ public class ViusicMain extends PApplet {
 
 	// Minim
 	Minim min;
+	
+	public boolean loopMenuOpen;
+
 
 	// Time variables
 	private int timePassed, lastTime;
@@ -105,10 +109,10 @@ public class ViusicMain extends PApplet {
 		}
 
 		if (key != CODED && !sm.getIsDrawingCollectionMenu()
-				&& !sm.getIsDrawingSettingsMenu()) {
+				&& !sm.getIsDrawingSettingsMenu() && !loopMenuOpen) {
 
 			// Testing video/audio playback
-			if (!videoM.playVideo((int) key, true))
+			if (!videoM.playVideo((int) key, true) )
 				sndM.playSound((int) key, true);
 
 			drawUI(key);
@@ -207,6 +211,13 @@ public class ViusicMain extends PApplet {
 				// sm.resetSettingsMenu();
 				sm.setIsDrawingSettingsMenu(false);
 			}
+			break;
+		case "start time":
+			sm.passToLoopMenu("start time", event.getStringValue());
+			break;
+			
+		case "end time":
+			sm.passToLoopMenu("end time", event.getStringValue());
 			break;
 		case "collectionName":
 			sm.passName(event.getStringValue());

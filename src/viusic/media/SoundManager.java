@@ -58,16 +58,21 @@ public class SoundManager {
 		//Set the end time for this loop to stop
 		if (recording){
 			recording = false;
+			
 			currentLoop.setEndTime(currentTime);
 			loops.add(currentLoop);
+			sm.addLoop(loops.size());
+			
 			System.out.println("Recording Ended");
 
 		//Start recording and listening for inputs
 		}else{
-			currentTime = 0;
-			currentLoop = new Loop();
-			recording = true;
-			System.out.println("Recording Started");
+			if(loops.size() < 4){
+				currentTime = 0;
+				currentLoop = new Loop();
+				recording = true;
+				System.out.println("Recording Started");
+			}
 		}
 		
 	}
@@ -92,5 +97,9 @@ public class SoundManager {
 		}
 
 		
+	}
+
+	public Loop getLoop(int number) {
+		return loops.get(number);
 	}
 }
