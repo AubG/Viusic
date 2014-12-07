@@ -2,11 +2,13 @@ package viusic.UI;
 
 import java.util.ArrayList;
 
-import controlP5.ControlP5;
+import org.gstreamer.media.event.StopEvent;
+
 import processing.core.PConstants;
 import processing.core.PImage;
 import viusic.main.ViusicMain;
 import viusic.media.SoundManager;
+import controlP5.ControlP5;
 
 public class ScreenManager {
 	
@@ -38,6 +40,7 @@ public class ScreenManager {
 		cp5 = c;
 		screenWidth = s_W;
 		screenHeight = s_H;
+		
 		setup();
 	}
 	
@@ -46,9 +49,9 @@ public class ScreenManager {
 		//PFont font = parent.createFont("arial", 20);
 		screenObjects = new ArrayList<ImageButton>();
 		//Getting Images
-		PImage [] images = { parent.loadImage("\\Viusic\\data\\images\\settings_gear.png"), //Image 1
-				parent.loadImage("\\Viusic\\data\\images\\settings_gear.png"),//Image 2
-				parent.loadImage("\\Viusic\\data\\images\\settings_gear.png")};//Image 3
+		PImage [] images = { parent.loadImage("/Viusic/data/images/settings_gear.png"), //Image 1
+				parent.loadImage("/Viusic/data/images/settings_gear.png"),//Image 2
+				parent.loadImage("/Viusic/data/images/settings_gear.png")};//Image 3
 		
 		
 		screenObjects.add(new ImageButton(parent, images, "gear", 5, screenHeight - 35, 1){
@@ -62,8 +65,9 @@ public class ScreenManager {
 			}
 		});
 		
+		
 		//Creating Settings menu
-		setMenu = new SettingsMenu(parent, sndM, screenHeight, screenWidth);
+		setMenu = new SettingsMenu(parent, sndM, screenObjects, screenHeight, screenWidth);
 		
 		// :: SETTING UP BUTTONS :: 
 		// Collection button
@@ -92,6 +96,7 @@ public class ScreenManager {
 	
 	public void giveSoundManager(SoundManager s){
 		sndM = s;
+		setMenu.setSoundManager(s);
 	}
 	
 	public void drawHomeBar(){
@@ -109,6 +114,7 @@ public class ScreenManager {
  	public void setIsDrawingSettingsMenu(boolean input){
 		drawingSettingsMenu = input;
 		
+		setMenu.stopSetMenu();
 		if(!input){
 			setMenu.resetMenuPosition();
 		}
@@ -260,7 +266,7 @@ public class ScreenManager {
 		int tempX = 0, tempY = 0;
 		
 		//Add code for collection menu
-		for(int i = 0; i < sndM.getCollectionLength(); i++){
+		for(int i = 0; i < parent.getCollectionLength(); i++){
 			
 			//Temp storage for position, passed to collection class for mouseOver detection
 			tempX = screenWidth - 201;
@@ -273,13 +279,13 @@ public class ScreenManager {
 			parent.rect(tempX, tempY, 200, 40);
 			
 			//Setting position of button in Collection Class
-			sndM.getCollection(i).setMenuPosition(tempX, tempY);
+			parent.getCollection(i).setMenuPosition(tempX, tempY);
 			
 			//Drawing text in center
 			parent.fill(255);
 			parent.textAlign(PConstants.CENTER);
 			parent.textFont(parent.createFont("arial", 12));
-			parent.text(sndM.getCollection(i).getCollectionName(), tempX+101, ((initialY+25) - i*(40)));
+			parent.text(parent.getCollection(i).getCollectionName(), tempX+101, ((initialY+25) - i*(40)));
 		}
 	}
 	
@@ -297,7 +303,7 @@ public class ScreenManager {
 			parent.fill(0);
 			parent.textAlign(PConstants.CENTER);
 			parent.textFont(parent.createFont("arial", 12));
-			parent.text(sndM.getCurrentCollection().getCollectionName(), screenWidth - 101, screenHeight - 47);
+			parent.text(parent.getCurrentCollection().getCollectionName(), screenWidth - 101, screenHeight - 47);
 		}
 		
 		parent.strokeWeight(1);
@@ -305,7 +311,9 @@ public class ScreenManager {
 
 	//Mouse Events
 	public void mouseClicked(int mouseX, int mouseY) {
-		for(ImageButton obj : screenObjects){
+		
+		for(int i = 0; i < screenObjects.size(); i++){
+			ImageButton obj = screenObjects.get(i);
 			obj.mousePressed(mouseX, mouseY);
 		}
 		

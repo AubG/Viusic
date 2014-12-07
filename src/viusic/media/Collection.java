@@ -2,8 +2,8 @@ package viusic.media;
 
 import java.util.HashMap;
 
-public class AudioCollection<K, V> {
-	private HashMap<K, V> sounds = new HashMap<K, V>();
+public class Collection<Integer, String> {
+	private HashMap<Integer, String> media = new HashMap<Integer, String>();
 	
 	//Collection Info
 	String collectionName;
@@ -11,8 +11,11 @@ public class AudioCollection<K, V> {
 	//Collection Menu Location
 	int posX = 0, posY = 0;
 	
-	public AudioCollection(String name){
+	public Collection(String name){
 		collectionName = name;
+	}
+	public HashMap<Integer, String> getMedia(){
+		return media;
 	}
 	
 	public String getCollectionName(){
@@ -23,17 +26,17 @@ public class AudioCollection<K, V> {
 		collectionName = name;
 	}
 	
-	public V get(K key){
-		return sounds.get(key);
+	public String get(Integer key){
+		return media.get(key);
 	}
 	
-	public void set(K key, V value){
-		sounds.put(key, value);
+	public void set(Integer key, String value){
+		media.put(key, value);
 	}
 	
-	public void changeKey(K oldKey, K newKey, V value){
-		sounds.remove(oldKey);
-		sounds.put(newKey, value);
+	public void changeKey(Integer oldKey, Integer newKey, String value){
+		media.remove(oldKey);
+		media.put(newKey, value);
 	}
 	
 	// Sets position of menu button, easier to check for mouseOver
@@ -56,5 +59,8 @@ public class AudioCollection<K, V> {
 		}
 		
 		return false;
+	}
+	public int getCollectionLength() {
+		return media.size();
 	}
 }

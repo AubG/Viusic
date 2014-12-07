@@ -3,6 +3,7 @@ package viusic.UI;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
+import processing.core.PConstants;
 import processing.core.PImage;
 import viusic.main.ViusicMain;
 
@@ -18,16 +19,32 @@ public class ImageButton {
 	private PImage[] images;
 	private boolean animating;
 	private ViusicMain main;
+	private String text;
 
 	// For Tweening
 	private float targetScale;
 	private int targetX, targetY;
 	private boolean looping;
+	private boolean buttonMode;
 
-	public ImageButton() {
-
+	public ImageButton(ViusicMain main, String text, int x, int y, int width, int height,
+			float scale) {
+		init(main, text, null, x, y, width, height, scale);
+		buttonMode = true;
 	}
 
+	// timeBtwnImages in milliseconds = 1 second / 1000
+	public ImageButton(ViusicMain main, String buttonName,
+			ArrayList<PImage> animation, int timeBtwnImages, int x, int y,
+			int width, int height, float scale) {
+		// Send in image to be evaluated
+		PImage[] image = { animation.get(0), animation.get(0), animation.get(0) };
+		init(main, buttonName, image, x, y, width, height, scale);
+
+		animating = true; // For update() won't animate unless animating = true
+		this.timeBtwnImages = timeBtwnImages;
+	}
+		
 	// For traditional button functionality
 	public ImageButton(ViusicMain main, PImage[] buttonImages,
 			String buttonName, int x, int y, float scale) {
@@ -40,78 +57,83 @@ public class ImageButton {
 					+ "AND MOUSE NOT CLICKED FOR IMAGEBUTTONS");
 		}
 
-		init(main, buttonName, buttonImages, x, y, scale);
+		width = (int) (buttonImages[0].width);
+		height = (int) (buttonImages[0].height);
+		init(main, buttonName, buttonImages, x, y, width, height, scale);
 
 	}
 
 	//
 	private void init(ViusicMain main, String buttonName,
-			PImage[] buttonImages, int x, int y, float scale) {
+			PImage[] buttonImages, int x, int y, int width, int height,
+			float scale) {
 		// Variables for controlling size
 		this.main = main;
+		
+		// Determining size of image
+		this.width = width;
+		this.height = height;
 		this.scale = Math.abs(scale);
 		images = buttonImages;
+		this.text = buttonName;
+		buttonMode = true;
 
 		// Set position
 		this.x = x;
 		this.y = y;
-		// Determining size of image
-		width = (int) (buttonImages[0].width);
-		height = (int) (buttonImages[0].height);
-		bounds = new Rectangle(x, y, (int)(width * this.scale), (int)(height * this.scale));
+
+		bounds = new Rectangle(x, y, (int) (width * this.scale),
+				(int) (height * this.scale));
 	}
 
-	// timeBtwnImages in milliseconds = 1 second / 1000
-	public ImageButton(ViusicMain main, String buttonName,
-			ArrayList<PImage> animation, int timeBtwnImages, int x, int y,
-			float scale) {
-		// Send in image to be evaluated
-		PImage[] image = { animation.get(0), animation.get(0), animation.get(0) };
-		init(main, buttonName, image, x, y, scale);
-
-		animating = true; // For update() won't animate unless animating = true
-		this.timeBtwnImages = timeBtwnImages;
-	}
 	
-	//mouse event handlers
-	public boolean mousePressed(int x, int y){
-		if(bounds.contains(x, y)){
+
+	// mouse event handlers
+	public boolean mousePressed(int x, int y) {
+		if (bounds.contains(x, y)) {
 			beingClicked = true;
-			if(!animating){
+			if (!animating && images != null) {
 				currentIndex = 2;
 			}
 			onMousePress(x, y);
 			return true;
 		}
-		
+
 		return false;
 	}
-	public boolean mouseOver(int x, int y){
-		if(bounds.contains(x, y)){
-			if(!animating && !beingClicked){
-				currentIndex = 1;
+
+	// Called every frame
+	public boolean mouseOver(int x, int y) {
+		if (bounds.contains(x, y)) {
+			if (!animating) {
+				if (!beingClicked)
+					currentIndex = 1;
+
 			}
-		}
+		} else if (buttonMode)
+			currentIndex = 0;
+
 		return false;
 	}
-	public boolean mouseReleased(int x, int y){
+
+	public boolean mouseReleased(int x, int y) {
 		beingClicked = false;
-		if(bounds.contains(x, y)){
+		if (bounds.contains(x, y)) {
 			onMouseRelease(x, y);
 			return true;
 		}
-		
+
 		return false;
 	}
 
-	//Override for each individual object so they can do different
-	//things when they are clicked
+	// Override for each individual object so they can do different
+	// things when they are clicked
 	public void onMouseRelease(int x, int y) {
-		
+
 	}
 
-	//Override for each individual object so they can do different
-	//things when they are clicked
+	// Override for each individual object so they can do different
+	// things when they are clicked
 	public void onMousePress(int x, int y) {
 
 	}
@@ -122,7 +144,7 @@ public class ImageButton {
 		stateTime += deltaTime;
 		// Animate animation
 		if (animating) {
-			//Cycles through each image in animation
+			// Cycles through each image in animation
 			while (stateTime > timeBtwnImages) {
 				stateTime -= timeBtwnImages;
 				currentIndex++;
@@ -131,29 +153,44 @@ public class ImageButton {
 				width = (int) (animation.get(currentIndex).width);
 				height = (int) (animation.get(currentIndex).height);
 			}
-			
-			main.image(animation.get(currentIndex), x, y, width * scale, height * scale);
-		//Traditional Button Rendering
+			if (currentIndex >= images.length) {
+				onAnimationComplete();
+			}
+			main.image(animation.get(currentIndex), x, y, width * scale, height
+					* scale);
+			// Traditional Button Rendering
+		} else if (images != null) {
+			main.image(images[currentIndex], x, y, width * scale, height
+					* scale);
 		} else {
-			main.image(images[currentIndex], x, y, width * scale, height * scale);
+			main.fill(175);
+			main.stroke(0);
+
+			main.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+
+			main.fill(0);
+			main.textAlign(PConstants.CENTER);
+			main.text(text, bounds.x + bounds.width / 2, bounds.y + bounds.height / 2 +  5);
 		}
 
 	}
-	//When animation completes, either restart or just go back to first image of animation
-	private void onAnimationComplete(){
-		currentIndex = 0;
 
-		//Set animating to false
-		if(!looping){
+	// When animation completes, either restart or just go back to first image
+	// of animation
+	private void onAnimationComplete() {
+
+		// Set animating to false
+		if (!looping) {
 			animating = false;
+
 		}
 		animationCompletion();
 	}
-	
-	//Override on object level for individualized 
-	//behavior after animation completes
+
+	// Override on object level for individualized
+	// behavior after animation completes
 	private void animationCompletion() {
-		
+
 	}
 
 	public void setAnimating(boolean animating) {
@@ -182,12 +219,19 @@ public class ImageButton {
 
 	public void setScale(float scale) {
 		this.scale = scale;
-		
+
 	}
-	public Rectangle getBounds(){
+
+	public Rectangle getBounds() {
 		return bounds;
 	}
+
 	public float getScale() {
 		return scale;
+	}
+
+	public String getText() {
+
+		return text;
 	}
 }

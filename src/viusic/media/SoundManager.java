@@ -2,21 +2,14 @@ package viusic.media;
 
 import java.util.ArrayList;
 
-import processing.core.PApplet;
 import viusic.UI.ScreenManager;
+import viusic.main.ViusicMain;
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 
 public class SoundManager {
-
-	// ArrayList to store all collections
-	ArrayList<AudioCollection> collections = new ArrayList<>();
-	
-	// Holds currentCollection
-	AudioCollection<Integer, String> currentCollection;
-	
 	// PApplet passed from main
-	PApplet parent;
+	ViusicMain parent;
 	
 	// ScreenManager passed from main
 	ScreenManager sm;
@@ -31,22 +24,12 @@ public class SoundManager {
 	private Loop currentLoop;
 	private int currentTime;
 	
-	public SoundManager(PApplet p, Minim m, ScreenManager s){
+	public SoundManager(ViusicMain p, Minim m, ScreenManager s){
 		// Passed objects from main, Set to local objects
 		parent = p;
 		min = m;
 		sm = s;
 		loops = new ArrayList<Loop>();
-		
-		//Debug info, prints user directory
-		System.out.println(System.getProperty("user.dir"));
-	
-		// Creating all default collections
-		DefaultCollectionSetup.setup(this);
-	}
-	
-	public void addCollection(AudioCollection<Integer, String> c){
-		collections.add(c);
 	}
 	
 	public void playSound(int key, boolean fromUser){
@@ -56,38 +39,20 @@ public class SoundManager {
 		}
 		
 		// Debug key info, path to sound
-		System.out.println("keypressed was " + key);
-		System.out.println("path to sound  ::  " + currentCollection.get(key));
+		System.out.println(key + " :: path to sound  ::  " + parent.getCurrentCollection().get(key));
 		
 		// Get sound from above path, play sound
-		player = min.loadFile(currentCollection.get(key));
+		player = min.loadFile(parent.getCurrentCollection().get(key));
 		player.play();
 	}
 	
-	// Returns length of collection ArrayList
-	public int getCollectionLength(){
-		return collections.size();
-	}
 	
-	// Returns collection at given index from the ArrayList
-	public AudioCollection getCollection(int index){
-		return collections.get(index);
-	}
 	
-	// Sets the currentCollection
-	public void setCurrentCollection(int index){
-		currentCollection = collections.get(index);
-	}
-	
-	// Gets the currentCollection
-	public AudioCollection<Integer, String> getCurrentCollection(){
-		return currentCollection;
-	}
-	
+		
 	public void toggleRecord() {
 		//Only want to execute this method if
 		//we have a collection open and running
-		if(currentCollection == null)
+		if(parent.getCurrentCollection() == null)
 			return;
 		
 		//Set the end time for this loop to stop
