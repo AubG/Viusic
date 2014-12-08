@@ -53,10 +53,18 @@ public class ScreenManager {
 		//Font
 		//PFont font = parent.createFont("arial", 20);
 		screenObjects = new ArrayList<ImageButton>();
+		
+		String cwd;
+		
+		// current working directory
+		cwd = System.getProperty("user.dir");
+		
 		//Getting Images
-		PImage [] images = { parent.loadImage("/Viusic/data/images/settings_gear.png"), //Image 1
-				parent.loadImage("/Viusic/data/images/settings_gear.png"),//Image 2
-				parent.loadImage("/Viusic/data/images/settings_gear.png")};//Image 3
+		PImage [] images = { 
+			parent.loadImage(cwd + "/Viusic/data/images/settings_gear.png"), //Image 1
+			parent.loadImage(cwd + "/Viusic/data/images/settings_gear.png"), //Image 2
+			parent.loadImage(cwd + "/Viusic/data/images/settings_gear.png") //Image 3 
+		};
 		
 		
 		screenObjects.add(new ImageButton(parent, images, "gear", 5, screenHeight - 35, 1){
