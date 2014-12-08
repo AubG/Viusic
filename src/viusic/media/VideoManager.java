@@ -1,6 +1,7 @@
 package viusic.media;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -9,38 +10,28 @@ import viusic.main.ViusicMain;
 
 public class VideoManager {
 
-	ArrayList<Movie> videos;
-	ArrayList<Integer> keys;
-	ArrayList<Integer> playingVideoIndexes;
+	private HashMap<Integer, Movie> videos;
+	ArrayList<Integer> playingVideoKeys;
 	ViusicMain parent;
 	
 	public VideoManager(ViusicMain parent) {
-		videos = new ArrayList<Movie>();
-		keys = new ArrayList<Integer>();
-		playingVideoIndexes = new ArrayList<Integer>();
+		videos = new HashMap<Integer, Movie>();
+		playingVideoKeys = new ArrayList<Integer>();
 		this.parent = parent;
 
 	}
 	
 	public void draw(){
-		for(int i = 0; i < playingVideoIndexes.size(); i++){
-			parent.image(videos.get(playingVideoIndexes.get(i)), 0, 0);
+		for(int i = 0; i < playingVideoKeys.size(); i++){
+			parent.image(videos.get(playingVideoKeys.get(i)), 0, 0);
 		}
 	}
 
 	public boolean playVideo(Integer key, boolean fromUser) {
 		
-		System.out.println("VideoManager.playVideo :: START");
-		
-		for(int i = 0; i < keys.size(); i++){
-			
-			System.out.println("VideoManager.playVideo :: SEARCHING KEYS");
-			
-			if(keys.get(i).equals(key)){
-				videos.get(i).play();
-				playingVideoIndexes.add(i);
-				return true;
-			}
+		if(videos.containsKey(key)){
+			videos.get(key);
+			return true;
 		}
 		
 		return false;
@@ -48,8 +39,7 @@ public class VideoManager {
 
 	public void grabVideos(Collection<Integer, String> currentCollection) {
 		videos.clear();
-		keys.clear();
-		playingVideoIndexes.clear();
+		playingVideoKeys.clear();
 		
 		Iterator it = currentCollection.getMedia().entrySet().iterator();
 	    while (it.hasNext()) {
@@ -62,9 +52,7 @@ public class VideoManager {
 	        	System.out.println("We have infact found a movie");
 	        	System.out.println(pairs.getKey() + " = " + pairs.getValue());
 	        	
-	        	Movie mov = new Movie(parent, fileName);
-	        	videos.add(mov);
-	        	keys.add((Integer)(pairs.getKey()));
+	        	videos.put((Integer)pairs.getKey(), new Movie(parent, fileName));
 	        }
 	        // avoids a ConcurrentModificationException
 	        // also destroys our hashmap and causes everything to be null

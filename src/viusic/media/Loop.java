@@ -9,6 +9,7 @@ public class Loop {
 	private int endTime;
 	private float scale;
 	private int beginTime;
+	private boolean soundToggled = false;
 	
 	public Loop(){
 		times = new ArrayList<Integer>();
@@ -29,28 +30,40 @@ public class Loop {
 	public void setEndTime(int endTime){
 		
 		this.endTime = endTime;
-		if(endTime < times.get(times.size() - 1)){
-			this.endTime = times.get(times.size() - 1);
-		}
+		
+//		if(endTime < times.get(times.size() - 1)){
+//			this.endTime = times.get(times.size() - 1);
+//		}
+	}
+	
+	public int getEndTime(){
+		return endTime;
 	}
 	
 	public void setBeginTime(int beginTime){
 		this.beginTime = beginTime;
 
-		if(beginTime > times.get(0)){
-			this.beginTime = times.get(0);
-		}
-		
+//		if(beginTime > times.get(0)){
+//			this.beginTime = times.get(0);
+//		}
 	}
+	
+	public int getBeginTime(){
+		return beginTime;
+	}
+	
 	public ArrayList<Integer> getSoundsToPlay(int deltaTime){
+		if(!soundToggled)
+			return null;
+		
 		//To be returned
 		ArrayList<Integer> keysToSend = new ArrayList<Integer>();
 		int lastTime = currentTime;
-		currentTime += deltaTime * scale;
-		System.out.println(deltaTime + " scale " + scale);
+		currentTime += deltaTime * scale;		
 		
-		
-		
+		if(!soundToggled)
+			return keysToSend;
+			
 		//Check each time for sounds that should play this frame
 		for(int i = 0; i < times.size(); i++){
 			int time = times.get(i);
@@ -66,6 +79,24 @@ public class Loop {
 			currentTime = beginTime;
 
 		return keysToSend;
+	}
+	
+	public ArrayList<Integer> getTimes(){
+		return times;
+	}
+	
+	public void setSoundToggled(){
+		if(soundToggled){
+			soundToggled = false;
+		} else {
+			
+			currentTime = beginTime;
+			soundToggled = true;
+		}
+	}
+	
+	public boolean getSoundToggled(){
+		return soundToggled;
 	}
 
 }

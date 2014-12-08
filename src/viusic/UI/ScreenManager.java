@@ -37,6 +37,7 @@ public class ScreenManager {
 	SettingsMenu setMenu;
 
 	private LoopMenu loopMenu;
+	public boolean loopMenuOpen = false;
 
 	
 	public ScreenManager(ViusicMain p, ControlP5 c, int s_W, int s_H){
@@ -92,6 +93,18 @@ public class ScreenManager {
 		.setSize(50,30)
 		.setVisible(true)
 		;
+		
+		//Setting up start time text field
+		//Setting up end time text field
+		parent.cp5.addTextfield("start time")
+		.setPosition(ViusicMain.screenWidth -  (int)(ViusicMain.screenWidth / 1.2f) + 40, (int)( ViusicMain.screenHeight / 1.45f) + 50)
+		.setSize(150, 25)
+		.setVisible(false);
+
+		parent.cp5.addTextfield("end time")
+		.setPosition(ViusicMain.screenWidth -  (int)(ViusicMain.screenWidth / 1.2f) + 210, (int)( ViusicMain.screenHeight / 1.45f)  + 50)
+		.setSize(150, 25)
+		.setVisible(false);
 	}
 	
 	public void passName(String input){
@@ -322,7 +335,7 @@ public class ScreenManager {
 			obj.mousePressed(mouseX, mouseY);
 		}
 		
-		if(parent.loopMenuOpen)
+		if(loopMenuOpen)
 			loopMenu.mousePress(mouseX, mouseY);
 		
 		
@@ -367,7 +380,7 @@ public class ScreenManager {
 
 			@Override
 			public void onMousePress(int x, int y) {
-				if(!parent.loopMenuOpen){
+				if(!loopMenuOpen){
 					loopMenu(sndM.getLoop(getNumber() - 1), getNumber() - 1);
 				}
 			}
@@ -377,16 +390,22 @@ public class ScreenManager {
 		screenObjects.add(loopImage);
 		
 	}
+	
 	public void loopMenu(Loop loop, int i){
 		
-		parent.loopMenuOpen = true;
+		loopMenuOpen = true;
 		loopMenu = new LoopMenu(parent, this, loop, i);
-		
-		
-		
 	}
 
 	public void passToLoopMenu(String button, String stringValue) {
 		loopMenu.setValue(button, stringValue);
+	}
+
+	public boolean getIsLoopMenuOpen(){
+		return loopMenuOpen;
+	}
+	
+	public void setLoopMenuOpen(boolean input){
+		loopMenuOpen = input;
 	}
 }

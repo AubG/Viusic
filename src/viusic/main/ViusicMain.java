@@ -45,9 +45,6 @@ public class ViusicMain extends PApplet {
 
 	// Minim
 	Minim min;
-	
-	public boolean loopMenuOpen;
-
 
 	// Time variables
 	private int timePassed, lastTime;
@@ -99,17 +96,34 @@ public class ViusicMain extends PApplet {
 	}
 
 	public void keyPressed() {
-
 		/*
-		 * Plays sound on keyPressed Wont play sound if in CollectionMenu
+		 * Plays sound on keyPressed
+		 * no sounds played when in menus
 		 */
 		if (key == 32) {
 			sndM.toggleRecord();
 			return;
 		}
+		
+		//Toggling Loops
+		switch(key){
+		case 49:
+			sndM.getLoop(0).setSoundToggled();
+			return;
+		case 50:
+			sndM.getLoop(1).setSoundToggled();
+			return;
+		case 51:
+			sndM.getLoop(2).setSoundToggled();
+			return;
+		case 52:
+			sndM.getLoop(3).setSoundToggled();
+			return;
+		}
+			
 
 		if (key != CODED && !sm.getIsDrawingCollectionMenu()
-				&& !sm.getIsDrawingSettingsMenu() && !loopMenuOpen) {
+				&& !sm.getIsDrawingSettingsMenu() && !sm.getIsLoopMenuOpen()) {
 
 			// Testing video/audio playback
 			if (!videoM.playVideo((int) key, true) )
@@ -167,8 +181,10 @@ public class ViusicMain extends PApplet {
 
 	public void drawUI(int key) {
 		background(rand1, rand2, rand3);
+		
+		videoM.draw();
+		
 		sm.drawButtonIndicators(key);
-
 		if (sm.getIsDrawingCollectionMenu())
 			sm.drawCollectionMenu();
 		else
@@ -238,6 +254,7 @@ public class ViusicMain extends PApplet {
 		currentCollectionIndex = index;
 		
 		videoM.grabVideos(collections.get(currentCollectionIndex));
+		sndM.grabAudio(collections.get(currentCollectionIndex));
 	}
 
 	// Gets the currentCollection
