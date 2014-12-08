@@ -58,8 +58,16 @@ public class SoundManager {
 
 			if (fileIsAudiofileName(fileName)) {
 				System.out.println(pairs.getKey() + " = " + pairs.getValue());
-
-				sounds.put((Integer)pairs.getKey(), min.loadFile(fileName));
+				
+				// attempt to load audio resource
+				try {
+					sounds.put((Integer)pairs.getKey(), min.loadFile(fileName));
+				} 
+				catch (Exception e) {
+					// catch failed load 
+					System.out.println(e.getMessage());
+				}
+				
 			}
 			// avoids a ConcurrentModificationException
 			// also destroys our hashmap and causes everything to be null
