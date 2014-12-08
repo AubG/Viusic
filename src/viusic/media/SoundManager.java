@@ -38,13 +38,23 @@ public class SoundManager {
 	}
 
 	public void playSound(int key, boolean fromUser) {
+		
 		// for building a new loop
 		if (fromUser && recording) {
 			currentLoop.passInput(key, currentTime);
 		}
-
-		// Get sound from above path, play sound
-		sounds.get(key).play(0);
+		
+		// attempt to load audio resource
+		try {
+			
+			// Get sound from above path, play sound
+			sounds.get(key).play(0);	
+		} catch (Exception e) {
+			
+			// catch failed attempt
+			System.out.println(e.getMessage());
+		}
+		
 	}
 
 	public void grabAudio(Collection currentCollection) {
