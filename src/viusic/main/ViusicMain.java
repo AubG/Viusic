@@ -102,44 +102,53 @@ public class ViusicMain extends PApplet {
 	}
 
 	public void keyPressed() {
-		/*
-		 * Plays sound on keyPressed
-		 * no sounds played when in menus
-		 */
-		if (key == 32) {
-			sndM.toggleRecord();
-			return;
-		}
-		
-		//User presses numbers 1 - 4 to toggle the loop playback.
-		switch(key){
-		case 49:
-			sndM.getLoop(0).soundToggle();
-			return;
-		case 50:
-			sndM.getLoop(1).soundToggle();
-			return;
-		case 51:
-			sndM.getLoop(2).soundToggle();
-			return;
-		case 52:
-			sndM.getLoop(3).soundToggle();
-			return;
-		}
+	
+		// attempt to load audio resources
+		try {
+			/*
+			 * Plays sound on keyPressed
+			 * no sounds played when in menus
+			 */
+			if (key == 32) {
+				sndM.toggleRecord();
+				return;
+			}
 			
-		//key pressed and not in any menus
-		if (key != CODED && !sm.getIsDrawingCollectionMenu()
-				&& !sm.getIsDrawingSettingsMenu() && !sm.getIsLoopMenuOpen()) {
+			//User presses numbers 1 - 4 to toggle the loop playback.
+			switch(key){
+			case 49:
+				sndM.getLoop(0).soundToggle();
+				return;
+			case 50:
+				sndM.getLoop(1).soundToggle();
+				return;
+			case 51:
+				sndM.getLoop(2).soundToggle();
+				return;
+			case 52:
+				sndM.getLoop(3).soundToggle();
+				return;
+			}
+				
+			//key pressed and not in any menus
+			if (key != CODED && !sm.getIsDrawingCollectionMenu()
+					&& !sm.getIsDrawingSettingsMenu() && !sm.getIsLoopMenuOpen()) {
 
-			// Testing video/audio playback
-			if (!videoM.playVideo((int) key, true) )
-				sndM.playSound((int) key, true);
-			
-			//Pressed on a key to sound or video
-			drawUI(key);
-		//Otherwise settings menu receives the key
-		} else if (sm.getIsSettingKey()) {
-			sm.passKey(key);
+				// Testing video/audio playback
+				if (!videoM.playVideo((int) key, true) )
+					sndM.playSound((int) key, true);
+				
+				//Pressed on a key to sound or video
+				drawUI(key);
+			//Otherwise settings menu receives the key
+			} else if (sm.getIsSettingKey()) {
+				sm.passKey(key);
+			}
+	
+		} 
+		// handle exception
+		catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
 	}
 
