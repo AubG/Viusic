@@ -38,13 +38,23 @@ public class SoundManager {
 	}
 
 	public void playSound(int key, boolean fromUser) {
+		
 		// for building a new loop
 		if (fromUser && recording) {
 			currentLoop.passInput(sounds.get(key), currentTime);
 		}
-
-		// Get sound from above path, play sound
-		sounds.get(key).play(0);
+		
+		// attempt to load audio resource
+		try {
+			
+			// Get sound from above path, play sound
+			sounds.get(key).play(0);	
+		} catch (Exception e) {
+			
+			// catch failed attempt
+			System.out.println(e.getMessage());
+		}
+		
 	}
 
 	public void grabAudio(Collection currentCollection) {
@@ -58,8 +68,16 @@ public class SoundManager {
 
 			if (fileIsAudiofileName(fileName)) {
 				System.out.println(pairs.getKey() + " = " + pairs.getValue());
-
-				sounds.put((Integer)pairs.getKey(), min.loadFile(fileName));
+				
+				// attempt to load audio resource
+				try {
+					sounds.put((Integer)pairs.getKey(), min.loadFile(fileName));
+				} 
+				catch (Exception e) {
+					// catch failed load 
+					System.out.println(e.getMessage());
+				}
+				
 			}
 			// avoids a ConcurrentModificationException
 			// also destroys our hashmap and causes everything to be null
