@@ -31,7 +31,7 @@ public class DefaultCollectionSetup {
 		piano.set((int) 'y', "/viusic/data/piano/piano_6.wav");
 		piano.set((int) 'u', "/viusic/data/piano/piano_7.wav");
 		piano.set((int) 'i', "/viusic/data/piano/piano_8.wav");
-		piano.set((int) 'o', "/viusic/data/piano/piano_9.wav");
+	/*	piano.set((int) 'o', "/viusic/data/piano/piano_9.wav");
 		piano.set((int) 'p', "/viusic/data/piano/piano_10.wav");
 		piano.set((int) '[', "/viusic/data/piano/piano_11.wav");
 		piano.set((int) ']', "/viusic/data/piano/piano_12.wav");
@@ -54,7 +54,7 @@ public class DefaultCollectionSetup {
 		piano.set((int) 'n', "/viusic/data/piano/piano_29.wav");
 		piano.set((int) 'm', "/viusic/data/piano/piano_30.wav");
 		piano.set((int) ',', "/viusic/data/piano/piano_31.wav");
-		piano.set((int) '.', "/viusic/data/piano/piano_32.wav");
+		piano.set((int) '.', "/viusic/data/piano/piano_32.wav");*/
 
 		parent.addCollection(piano);
 	}

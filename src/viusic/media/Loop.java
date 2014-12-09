@@ -2,6 +2,8 @@ package viusic.media;
 
 import java.util.ArrayList;
 
+import ddf.minim.AudioPlayer;
+
 public class Loop {
 	private ArrayList<Integer> times;
 	private ArrayList<Integer> keys;
@@ -10,6 +12,7 @@ public class Loop {
 	private float scale;
 	private int beginTime;
 	private boolean soundToggled = false;
+	private AudioPlayer audioPlayer;
 	
 	public Loop(){
 		times = new ArrayList<Integer>();
@@ -23,9 +26,12 @@ public class Loop {
 	public float getScale(){
 		return scale;
 	}
-	public void passInput(int key, int currentTime) {
-		times.add(new Integer(currentTime));
-		keys.add(new Integer(key));
+	
+	//Sends in a audio player
+	public void passInput(AudioPlayer audioPlayer, int currentTime) {
+		this.audioPlayer = audioPlayer;
+		times.add(currentTime);
+		
 	}
 	public void setEndTime(int endTime){
 		
@@ -52,17 +58,15 @@ public class Loop {
 		return beginTime;
 	}
 	
+	//Returns the sounds that should be started THIS FRAME
 	public ArrayList<Integer> getSoundsToPlay(int deltaTime){
 		if(!soundToggled)
 			return null;
-		
-		//To be returned
-		ArrayList<Integer> keysToSend = new ArrayList<Integer>();
 		int lastTime = currentTime;
-		currentTime += deltaTime * scale;		
+		currentTime += deltaTime * scale;
 		
-		if(!soundToggled)
-			return keysToSend;
+		//To be returned with mappings
+		ArrayList<Integer> keysToSend = new ArrayList<Integer>();
 			
 		//Check each time for sounds that should play this frame
 		for(int i = 0; i < times.size(); i++){
@@ -71,13 +75,15 @@ public class Loop {
 			//If this index's time is between last frames time
 			//and now, add it to the sounds to be played
 			if(time >= lastTime && time < currentTime){
-				keysToSend.add(new Integer(keys.get(i)));
+				audioPlayer.play(0);
 			}
 		}
 		
+		//Set currentTime to the loop's beginning time
 		if(currentTime > endTime)
 			currentTime = beginTime;
 
+		//Buttons to be virtually pressed
 		return keysToSend;
 	}
 	
@@ -85,11 +91,12 @@ public class Loop {
 		return times;
 	}
 	
-	public void setSoundToggled(){
+	//Toggle method for playing the loop
+	//Restarts the loop from beginTime
+	public void soundToggle(){
 		if(soundToggled){
 			soundToggled = false;
 		} else {
-			
 			currentTime = beginTime;
 			soundToggled = true;
 		}
@@ -98,5 +105,6 @@ public class Loop {
 	public boolean getSoundToggled(){
 		return soundToggled;
 	}
+	
 
 }

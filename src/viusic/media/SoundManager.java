@@ -40,7 +40,7 @@ public class SoundManager {
 	public void playSound(int key, boolean fromUser) {
 		// for building a new loop
 		if (fromUser && recording) {
-			currentLoop.passInput(key, currentTime);
+			currentLoop.passInput(sounds.get(key), currentTime);
 		}
 
 		// Get sound from above path, play sound
@@ -113,13 +113,13 @@ public class SoundManager {
 		for (Loop curLoop : loops) {
 
 			sounds = curLoop.getSoundsToPlay(deltaTime);
-			// Make sure there is at least one sound to play
+			/*// Make sure there is at least one sound to play
 			if (sounds != null) {
 				// Play all sounds for this loop in this frame
 				for (int i = 0; i < sounds.size(); i++) {
 					playSound(sounds.get(i), false);
 				}
-			}
+			}*/
 
 		}
 

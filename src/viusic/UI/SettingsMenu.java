@@ -401,7 +401,7 @@ public class SettingsMenu {
 	}
 
 	public void setKey(char key) {
-		if (selectedPath != null || !selectedPath.equals("null")) {
+		if (selectedPath != null) {
 			
 			System.out.println(key + " = " + selectedPath);
 			
