@@ -51,20 +51,7 @@ public class ScreenManager {
 		// Font
 		// PFont font = parent.createFont("arial", 20);
 		screenObjects = new ArrayList<ImageButton>();
-<<<<<<< HEAD
-		// Getting Images
-		PImage[] images = {
-				parent.loadImage("/Viusic/data/images/settings_gear.png"), // Image
-																			// 1
-				parent.loadImage("/Viusic/data/images/settings_gear.png"),// Image
-																			// 2
-				parent.loadImage("/Viusic/data/images/settings_gear.png") };// Image
-																			// 3
-		//Adds the Gear button 
-		screenObjects.add(new ImageButton(parent, images, "gear", 5,
-				screenHeight - 35, 1) {
-=======
-		
+
 		String cwd;
 		
 		// current working directory
@@ -79,7 +66,6 @@ public class ScreenManager {
 		
 		
 		screenObjects.add(new ImageButton(parent, images, "gear", 5, screenHeight - 35, 1){
->>>>>>> f65dc95a07bda2dfa615304b635dc0ff113cc9c7
 			@Override
 			public void onMousePress(int x, int y) {
 				if (!getIsDrawingSettingsMenu())
