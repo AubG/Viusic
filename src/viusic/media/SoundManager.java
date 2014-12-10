@@ -41,14 +41,14 @@ public class SoundManager {
 		
 		// for building a new loop
 		if (fromUser && recording) {
-			currentLoop.passInput(sounds.get(key), currentTime);
+			currentLoop.passInput(sounds.get((int)key), currentTime);
 		}
 		
 		// attempt to load audio resource
 		try {
 			
 			// Get sound from above path, play sound
-			sounds.get(key).play(0);	
+			sounds.get((int)key).play(0);	
 		} catch (Exception e) {
 			
 			// catch failed attempt
@@ -127,18 +127,10 @@ public class SoundManager {
 	public void update(int deltaTime) {
 		currentTime += deltaTime;
 
-		ArrayList<Integer> sounds;
 		for (Loop curLoop : loops) {
 
-			sounds = curLoop.getSoundsToPlay(deltaTime);
-			/*// Make sure there is at least one sound to play
-			if (sounds != null) {
-				// Play all sounds for this loop in this frame
-				for (int i = 0; i < sounds.size(); i++) {
-					playSound(sounds.get(i), false);
-				}
-			}*/
-
+			curLoop.getSoundsToPlay(deltaTime);
+ 
 		}
 
 	}

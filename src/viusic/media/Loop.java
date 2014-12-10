@@ -12,11 +12,12 @@ public class Loop {
 	private float scale;
 	private int beginTime;
 	private boolean soundToggled = false;
-	private AudioPlayer audioPlayer;
+	private ArrayList<AudioPlayer> audioPlayers;
 	
 	public Loop(){
 		times = new ArrayList<Integer>();
 		keys = new ArrayList<Integer>();
+		audioPlayers = new ArrayList<AudioPlayer>();
 		scale = 1;
 		
 	}
@@ -29,7 +30,7 @@ public class Loop {
 	
 	//Sends in a audio player
 	public void passInput(AudioPlayer audioPlayer, int currentTime) {
-		this.audioPlayer = audioPlayer;
+		audioPlayers.add(audioPlayer);
 		times.add(currentTime);
 		
 	}
@@ -59,15 +60,13 @@ public class Loop {
 	}
 	
 	//Returns the sounds that should be started THIS FRAME
-	public ArrayList<Integer> getSoundsToPlay(int deltaTime){
+	public void getSoundsToPlay(int deltaTime){
 		if(!soundToggled)
-			return null;
+			return;
+		
 		int lastTime = currentTime;
 		currentTime += deltaTime * scale;
 		
-		//To be returned with mappings
-		ArrayList<Integer> keysToSend = new ArrayList<Integer>();
-			
 		//Check each time for sounds that should play this frame
 		for(int i = 0; i < times.size(); i++){
 			int time = times.get(i);
@@ -75,7 +74,7 @@ public class Loop {
 			//If this index's time is between last frames time
 			//and now, add it to the sounds to be played
 			if(time >= lastTime && time < currentTime){
-				audioPlayer.play(0);
+				audioPlayers.get(i).play(0);
 			}
 		}
 		
@@ -83,8 +82,6 @@ public class Loop {
 		if(currentTime > endTime)
 			currentTime = beginTime;
 
-		//Buttons to be virtually pressed
-		return keysToSend;
 	}
 	
 	public ArrayList<Integer> getTimes(){

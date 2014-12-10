@@ -51,7 +51,6 @@ public class SettingsMenu {
 		screenWidth = (float) width;
 
 		init();
-
 	}
 
 	private void init() {
@@ -87,6 +86,8 @@ public class SettingsMenu {
 		editingCollection = false;
 		indexSelected = -1;
 		selectedPath = "null";
+		audioFilePaths.clear();
+		videoFilePaths.clear();
 	}
 
 	// Where text field input arrives

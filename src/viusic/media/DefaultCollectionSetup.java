@@ -39,7 +39,7 @@ public class DefaultCollectionSetup {
 		piano.set((int) 'p', cwd + "/viusic/data/piano/piano_10.wav");
 		piano.set((int) '[', cwd + "/viusic/data/piano/piano_11.wav");
 		piano.set((int) ']', cwd + "/viusic/data/piano/piano_12.wav");
-		piano.set((int) 'a', cwd + "/viusic/data/piano/piano_13.wav");
+		piano.set((int) 'a', cwd + "/viusic/data/piano/shuffle.mp4");
 		piano.set((int) 's', cwd + "/viusic/data/piano/piano_14.wav");
 		piano.set((int) 'd', cwd + "/viusic/data/piano/piano_15.wav");
 		piano.set((int) 'f', cwd + "/viusic/data/piano/piano_16.wav");

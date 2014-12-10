@@ -35,7 +35,7 @@ public class ViusicMain extends PApplet {
 
 	// ArrayList to store all collections
 	ArrayList<Collection<Integer, String>> collections;
-	
+
 	// Holds currentCollection
 	Collection<Integer, String> currentCollection;
 	int currentCollectionIndex = 0;
@@ -60,8 +60,8 @@ public class ViusicMain extends PApplet {
 		// Initializing screenManager object, passing in PApplet and cp5
 		cp5 = new ControlP5(this);
 		min = new Minim(this);
-		
-		//Manager setup
+
+		// Manager setup
 		sm = new ScreenManager(this, cp5, screenWidth, screenHeight);
 		sndM = new SoundManager(this, min, sm);
 		sm.takeSoundManager(sndM);
@@ -72,8 +72,6 @@ public class ViusicMain extends PApplet {
 		// Loading DefaultCollections & Setup
 		dcS = new DefaultCollectionSetup(this);
 
-		
-
 		// Setting first default currentCollection
 		setCurrentCollection(0);
 	}
@@ -83,18 +81,16 @@ public class ViusicMain extends PApplet {
 		// Calculate time for this frame
 		timePassed = millis() - lastTime;
 		lastTime += timePassed;
-		
-		//update Sound Manager
-		sndM.update(timePassed);
 
-		
+		// update Sound Manager
+		sndM.update(timePassed);
 
 		// Mouse Position Update in ScreenManager
 		sm.mousePosition(mouseX, mouseY);
-		
-		//Draws background
+
+		// Draws background
 		drawUI();
-		//update ScreenManager
+		// update ScreenManager
 		sm.updateObjects(timePassed);
 
 		// User cannot change screen dimensions
@@ -102,20 +98,19 @@ public class ViusicMain extends PApplet {
 	}
 
 	public void keyPressed() {
-	
+
 		// attempt to load audio resources
 		try {
 			/*
-			 * Plays sound on keyPressed
-			 * no sounds played when in menus
+			 * Plays sound on keyPressed no sounds played when in menus
 			 */
 			if (key == 32) {
 				sndM.toggleRecord();
 				return;
 			}
-			
-			//User presses numbers 1 - 4 to toggle the loop playback.
-			switch(key){
+
+			// User presses numbers 1 - 4 to toggle the loop playback.
+			switch (key) {
 			case 49:
 				sndM.getLoop(0).soundToggle();
 				return;
@@ -129,23 +124,24 @@ public class ViusicMain extends PApplet {
 				sndM.getLoop(3).soundToggle();
 				return;
 			}
-				
-			//key pressed and not in any menus
+
+			// key pressed and not in any menus
 			if (key != CODED && !sm.getIsDrawingCollectionMenu()
-					&& !sm.getIsDrawingSettingsMenu() && !sm.getIsLoopMenuOpen()) {
+					&& !sm.getIsDrawingSettingsMenu()
+					&& !sm.getIsLoopMenuOpen()) {
 
 				// Testing video/audio playback
-				if (!videoM.playVideo((int) key, true) )
+				if (!videoM.playVideo((int) key, true))
 					sndM.playSound((int) key, true);
-				
-				//Pressed on a key to sound or video
+
+				// Pressed on a key to sound or video
 				drawUI(key);
-			//Otherwise settings menu receives the key
+				// Otherwise settings menu receives the key
 			} else if (sm.getIsSettingKey()) {
 				sm.passKey(key);
 			}
-	
-		} 
+
+		}
 		// handle exception
 		catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -165,8 +161,9 @@ public class ViusicMain extends PApplet {
 		sm.mouseClicked(mouseX, mouseY);
 		if (sm.getIsDrawingCollectionMenu()) {
 			for (int i = 0; i < getCollectionLength(); i++) {
-				
-				//Iterates through each collection and checks if it was clicked.
+
+				// Iterates through each collection and checks if it was
+				// clicked.
 				if (getCollection(i).isMouseOver(mouseX, mouseY)) {
 					setCurrentCollection(i);
 					sm.setIsDrawingCollectionMenu(false);
@@ -186,6 +183,7 @@ public class ViusicMain extends PApplet {
 	public void drawUI() {
 		background(rand1, rand2, rand3);
 
+		videoM.draw();
 
 		sm.drawButtonIndicators(0);
 
@@ -193,30 +191,31 @@ public class ViusicMain extends PApplet {
 			sm.drawCollectionMenu();
 		else
 			sm.drawCurrentCollectionTab();
-		
-		videoM.draw();
-		sm.drawHomeBar();
 
+		sm.drawHomeBar();
+		
+		// Updates ImageButton
+		sm.updateObjects(timePassed);
 	}
 
 	public void drawUI(int key) {
 		background(rand1, rand2, rand3);
-		
+
 		videoM.draw();
-		
-		//Draws button indicators
+
+		// Draws button indicators
 		sm.drawButtonIndicators(key);
-		
-		//Draws collection menu
+
+		// Draws collection menu
 		if (sm.getIsDrawingCollectionMenu())
 			sm.drawCollectionMenu();
-		
-		//Draws collection tab
+
+		// Draws collection tab
 		else
 			sm.drawCurrentCollectionTab();
-		
+
 		sm.drawHomeBar();
-		//Updates ImageButton
+		// Updates ImageButton
 		sm.updateObjects(timePassed);
 	}
 
@@ -257,7 +256,7 @@ public class ViusicMain extends PApplet {
 		case "start time":
 			sm.passToLoopMenu("start time", event.getStringValue());
 			break;
-			
+
 		case "end time":
 			sm.passToLoopMenu("end time", event.getStringValue());
 			break;
@@ -276,16 +275,16 @@ public class ViusicMain extends PApplet {
 
 	// Sets the currentCollection
 	public void setCurrentCollection(int index) {
-		
+
 		currentCollectionIndex = index;
-		
+
 		videoM.grabVideos(collections.get(currentCollectionIndex));
 		sndM.grabAudio(collections.get(currentCollectionIndex));
 	}
 
 	// Gets the currentCollection
 	public Collection<Integer, String> getCurrentCollection() {
-		
+
 		return collections.get(currentCollectionIndex);
 	}
 

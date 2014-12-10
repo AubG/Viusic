@@ -34,7 +34,7 @@ public class VideoManager {
 	public boolean playVideo(Integer key, boolean fromUser) {
 		
 		if(videos.containsKey(key)){
-			videos.get(key);
+			videos.get(key).play();
 			return true;
 		}
 		
@@ -68,6 +68,7 @@ public class VideoManager {
 	        	
 	        	//pushes another video into the videos HashMap
 	        	videos.put((Integer)pairs.getKey(), new Movie(parent, fileName));
+	        	playingVideoKeys.add((Integer)pairs.getKey());
 	        }
 	        // avoids a ConcurrentModificationException
 	        // also destroys our hashmap and causes everything to be null
