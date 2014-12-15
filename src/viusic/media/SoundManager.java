@@ -47,6 +47,8 @@ public class SoundManager {
 		// attempt to load audio resource
 		try {
 			
+			//Setup timestamps to find duration of iteration
+			
 			// Get sound from above path, play sound
 			sounds.get((int)key).play(0);	
 		} catch (Exception e) {
@@ -124,6 +126,10 @@ public class SoundManager {
 
 	}
 
+	public boolean getIsRecording(){
+		return recording;
+	}
+
 	public void update(int deltaTime) {
 		currentTime += deltaTime;
 
@@ -137,5 +143,10 @@ public class SoundManager {
 
 	public Loop getLoop(int number) {
 		return loops.get(number);
+	}
+
+	
+	public void deleteLoop(int loopNum) {
+		loops.remove(loopNum);
 	}
 }

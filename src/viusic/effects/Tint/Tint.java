@@ -27,7 +27,7 @@ public class Tint
 		master = papp;
 		
 		// color mode properties
-		cmRange = 100;
+		cmRange = 255;
 		master.colorMode(cm, cmRange, cmRange, cmRange);
 		
 		// tint properties
@@ -38,9 +38,12 @@ public class Tint
 	}
 	
 	
-	public void draw () 
+	public void draw (boolean tinting) 
 	{
-		master.tint(val1, val2, val3, opacity);
+		if(tinting)
+			master.tint(val1, val2, val3, opacity);
+		else
+			master.noTint();
 	}
 	
 	

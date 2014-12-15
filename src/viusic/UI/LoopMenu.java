@@ -5,20 +5,23 @@ import java.util.ArrayList;
 import processing.core.PConstants;
 import viusic.main.ViusicMain;
 import viusic.media.Loop;
+import viusic.media.SoundManager;
 
 public class LoopMenu {
 	private Loop loop;
 	private ViusicMain parent;
 	private ScreenManager sm;
+	private SoundManager sndM;
 	private int loopNum;
 	
 	private ArrayList<ImageButton> controlButtons;
 
-	public LoopMenu(ViusicMain parent, ScreenManager sm, Loop loop, int loopNum) {
+	public LoopMenu(ViusicMain parent, ScreenManager sm, SoundManager sound, Loop loop, int loopNum) {
 		this.loop = loop;
 		this.parent = parent;
 		this.sm = sm;
 		this.loopNum = loopNum;
+		this.sndM = sound;
 		
 		controlButtons = new ArrayList<ImageButton>();
 		
@@ -55,12 +58,23 @@ public class LoopMenu {
 			}
 		};
 		
-		ImageButton close = new ImageButton(parent, "x", title.getX() + 375, title.getY(), 25, 25, 1){
+		ImageButton close = new ImageButton(parent, "X", title.getX() + 375, title.getY(), 25, 25, 1){
 			@Override
 			public void onMousePress(int x, int y){
 				sm.setLoopMenuOpen(false);
 			}
 		};
+		close.setColor(200,50,50);
+		
+		ImageButton deleteLoop = new ImageButton(parent, "Delete", title.getX(), title.getY() + 3, 75, 19, 1){
+			@Override
+			public void onMousePress(int x, int y){
+				sndM.deleteLoop(loopNum);
+				sm.removeLoop(loop);
+				sm.setLoopMenuOpen(false);
+			}
+		};
+		deleteLoop.setColor(200,50,50);
 		
 		//Adding all the buttons to controlButtons array for drawing
 		controlButtons.add(backPane);
@@ -69,6 +83,7 @@ public class LoopMenu {
 		controlButtons.add(leftIncrement);
 		controlButtons.add(rightIncrement);
 		controlButtons.add(close);
+		controlButtons.add(deleteLoop);
 		
 		//Setting text fields to visible
 		parent.cp5.getController("start time").setVisible(true);
@@ -76,10 +91,16 @@ public class LoopMenu {
 
 	}
 	
-	public void destroy(){
+	public void hide(){
 		controlButtons.clear();
 		parent.cp5.getController("start time").setVisible(false);
 		parent.cp5.getController("end time").setVisible(false);
+	}
+	
+	public void destroy(){
+		//Destroy specific loop
+		sndM.deleteLoop(loopNum);
+		sm.removeLoop(loop);
 	}
 	
 	public void mousePress(int x, int y){
@@ -90,7 +111,7 @@ public class LoopMenu {
 	
 	public void update(int deltaTime){
 		if(!sm.getIsLoopMenuOpen()){
-			destroy();
+			hide();
 			return;
 		}
 		for(ImageButton objs : controlButtons){

@@ -28,15 +28,16 @@ public class SettingsMenu {
 	// Collection Authoring Variables
 	Collection<Integer, String> newCollection;
 	ArrayList<ImageButton> screenObjects;
-	ArrayList<String> audioFilePaths = new ArrayList<>();
-	ArrayList<String> videoFilePaths = new ArrayList<>();
-	boolean creatingCollection = false, editingCollection = false,
-			isSettingKey = false;
+	ArrayList<String> filePaths = new ArrayList<>();
+	boolean creatingCollection = false;
+	boolean editingCollection = false;
+	boolean isSettingKey = false;
 	String selectedPath;
 	int indexSelected = -1;
 
 	// File chooser stuff
 	JFileChooser jfile = new JFileChooser();
+	private boolean selectedCollection;
 
 	SettingsMenu(ViusicMain p, SoundManager s,
 			ArrayList<ImageButton> screenObjects, int height, int width) {
@@ -64,13 +65,12 @@ public class SettingsMenu {
 		// creating file browser in the home directory
 		jfile.setCurrentDirectory(new File(System.getProperty("user.home")));
 
-		cp5.setColorBackground(0xe1e1e1e1);
-		cp5.setColorLabel(0x64646464);
+		cp5.setColorBackground(0x000000);
 		cp5.setColorForeground(0xffffffff);
-		cp5.setColorActive(0x000000);
+		cp5.setColorActive(0xffffffff);
 
 		// Text Field for New Collection
-		cp5.addTextfield("collectionName").setSize(300, 25)
+		cp5.addTextfield("enter collection name").setSize(300, 25)
 				.setFont(parent.createFont("arial", 12)).setFocus(false)
 				.setVisible(false);
 	}
@@ -78,7 +78,7 @@ public class SettingsMenu {
 	// Called to put the menu off screen when not in use
 	public void resetMenuPosition() {
 		posY = screenHeight;
-		cp5.getController("collectionName").setVisible(false);
+		cp5.getController("enter collection name").setVisible(false);
 		mainTab = true;
 		collectionTab = false;
 		keyboardTab = false;
@@ -86,8 +86,7 @@ public class SettingsMenu {
 		editingCollection = false;
 		indexSelected = -1;
 		selectedPath = "null";
-		audioFilePaths.clear();
-		videoFilePaths.clear();
+		filePaths.clear();
 	}
 
 	// Where text field input arrives
@@ -112,32 +111,30 @@ public class SettingsMenu {
 
 			} else if (collectionTab) {
 
-
 				// If edit or new has been pressed
 				if (creatingCollection) {
 
 					// Drawing Textfield for colletion name
-					cp5.getController("collectionName").setPosition(posX + 36,
+					cp5.getController("enter collection name").setPosition(posX + 36,
 							posY + 100);
-					cp5.getController("collectionName").setVisible(true);
+					cp5.getController("enter collection name").setVisible(true);
 
 					// Prints name of current Collection
 					parent.fill(255);
 					parent.textAlign(PConstants.CENTER);
-					parent.text(newCollection.getCollectionName(), posX + 400,
-							posY + 92);
+					parent.text(newCollection.getCollectionName(), posX + 438,
+							posY + 117);
 
 					// Draws file paths in window
 					parent.stroke(0);
 					parent.fill(225);
 					parent.rect(posX + 35, posY + 150, 470, 300);
 
-				
-
 					// Putting Paths into Databox (Name subject to change)
 					float start = posY + 167;
 					int count = 0;
-					for (String path : audioFilePaths) {
+					Integer tempKey;
+					for (String path : filePaths) {
 
 						if (indexSelected == count) {
 							parent.noStroke();
@@ -150,26 +147,24 @@ public class SettingsMenu {
 						parent.fill(0);
 						parent.text(path, posX + 40, start + count * (25));
 
-						count++;
-					}
-					
-					for(String vPath : videoFilePaths){
-						if (indexSelected == count) {
-							parent.noStroke();
-							parent.fill(190);
-							parent.rect(posX + 36, posY + 150 + count * (25),
-									469, 25);
+						tempKey = newCollection.getKey(path);
+						if (tempKey != null) {
+							parent.textAlign(PConstants.CENTER);
+							parent.text("" + (char) tempKey.intValue(),
+									posX + 470, start + count * (25));
 						}
-
-						parent.textAlign(PConstants.LEFT);
-						parent.fill(0);
-						parent.text(vPath, posX + 40, start + count * (25));
 
 						count++;
 					}
 
 				} else if (editingCollection) {
 
+					if (selectedCollection) {
+						// Add logic for once collection has been selected
+					} else {
+						// If no collection selected draw the collection
+						// selection menu
+					}
 				}
 			} else if (keyboardTab) {
 
@@ -212,21 +207,38 @@ public class SettingsMenu {
 
 		// Checking if any tab has been clicked
 		if (mouseY > posY && mouseY < posY + 25) {
+
+			// MainTab pressed
 			if (mouseX > posX && mouseX < posX + 180) {
 				mainTab = true;
 				collectionTab = false;
 				keyboardTab = false;
-			} else if (mouseX > posX + 180 && mouseX < posX + 360) {
+
+				stopCollectionTab();
+				stopKeyboardTab();
+				startMainTab();
+
+			}
+			// CollectionTab pressed
+			else if (mouseX > posX + 180 && mouseX < posX + 360) {
 				mainTab = false;
 				collectionTab = true;
 				keyboardTab = false;
 
+				stopKeyboardTab();
+				stopMainTab();
 				startCollectionTab();
 
-			} else if (mouseX > posX + 360 && mouseX < posX + 540) {
+			}
+			// KeyboardTab pressed
+			else if (mouseX > posX + 360 && mouseX < posX + 540) {
 				mainTab = false;
 				collectionTab = false;
 				keyboardTab = true;
+
+				stopCollectionTab();
+				stopMainTab();
+				startKeyboardTab();
 			}
 		}
 
@@ -235,15 +247,11 @@ public class SettingsMenu {
 		if (mainTab) {
 
 		} else if (collectionTab) {
-
-			System.out.println("Inside Collection settings");
-			System.out.println("size of audioArray " + audioFilePaths.size());
-
 			
 			// Checking if path selected
 			float start = posY + 150;
 			int count = 0;
-			for (String path : audioFilePaths) {
+			for (String path : filePaths) {
 
 				if (mouseY > start + count * (25)
 						&& mouseY < start + (count) * (25) + 25) {
@@ -257,50 +265,43 @@ public class SettingsMenu {
 				}
 				count++;
 			}
-			for (String vPath : videoFilePaths) {
-
-				if (mouseY > start + count * (25)
-						&& mouseY < start + (count) * (25) + 25) {
-					if (mouseX > posX + 35 && mouseX < posX + 505) {
-
-						selectedPath = vPath;
-						indexSelected = count;
-						System.out.println("SelectedPath :: \n" + selectedPath);
-						break;
-					}
-				}
-				count++;
-			}
-			
 		} else if (keyboardTab) {
 
 		}
 	}
 
+	private void startMainTab() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void startKeyboardTab() {
+		// TODO Auto-generated method stub
+
+	}
+
 	private void startCollectionTab() {
-		
-		ImageButton collectionButton = new ImageButton(parent, "New Collection", 50, 140, 100,
-				25, 1) {
+
+		ImageButton collectionButton = new ImageButton(parent,
+				"New Collection", (int) (posX + 60), 140, 200, 25, 1) {
 			@Override
 			public void onMousePress(int x, int y) {
-				
-				//CREATES CREATION COLLECTION MENU
+
+				// CREATES CREATION COLLECTION MENU
 				if (!creatingCollection) {
 					creatingCollection = true;
 					editingCollection = false;
-					newCollection = new Collection<Integer, String>(
-							"untitled");
+					newCollection = new Collection<Integer, String>("untitled");
 					setUpCollectionMenu();
-					
+
 				}
 
 			}
 		};
 		screenObjects.add(collectionButton);
 
-
-		screenObjects.add(new ImageButton(parent, "Edit Collection", 170, 140,
-				100, 25, 1) {
+		screenObjects.add(new ImageButton(parent, "Edit Collection", (int) (posX + 280), 140,
+				200, 25, 1) {
 			@Override
 			public void onMousePress(int x, int y) {
 				super.onMousePress(x, y);
@@ -310,22 +311,18 @@ public class SettingsMenu {
 			}
 		});
 	}
-	
+
 	public void stopCreatingCollection() {
-		if(creatingCollection){
-			removeImageButton("Add Sound");
-			removeImageButton("Add Video");
+		if (creatingCollection) {
+			removeImageButton("Add File");
 			removeImageButton("Set Key");
 			removeImageButton("Save Collection");
+			cp5.getController("enter collection name").setVisible(false);
 		}
 
 		creatingCollection = false;
-
-
-		
-		
 	}
-	
+
 	public boolean removeImageButton(String name) {
 		for (ImageButton button : screenObjects) {
 			if (button.getText() == name) {
@@ -336,10 +333,10 @@ public class SettingsMenu {
 
 		return false;
 	}
-	
-	private void setUpCollectionMenu(){
-		ImageButton blank = new ImageButton(parent, "Add Sound", 50,
-				550, 100, 25, 1) {
+
+	private void setUpCollectionMenu() {
+		ImageButton blank = new ImageButton(parent, "Add File", 75, 550, 100,
+				25, 1) {
 			@Override
 			public void onMousePress(int x, int y) {
 				// Adding filePath to audioPathsArray
@@ -348,52 +345,30 @@ public class SettingsMenu {
 					File selectedFile = jfile.getSelectedFile();
 					System.out.println("Selected file: "
 							+ selectedFile.getAbsolutePath());
-					audioFilePaths.add(selectedFile
-							.getAbsolutePath());
-				}
-			}
-		}; 
-		
-		screenObjects.add(blank);
-		
-		
-		
-		ImageButton video = new ImageButton(parent, "Add Video", 170,
-				550, 100, 25, 1) {
-			@Override
-			public void onMousePress(int x, int y) {
-				// Adding filePath to videoPathsArray int result =
-				int result = jfile.showOpenDialog(new JFrame());
-				if (result == JFileChooser.APPROVE_OPTION) {
-					File selectedFile = jfile.getSelectedFile();
-					System.out.println("Selected file: "
-							+ selectedFile.getAbsolutePath());
-
-					videoFilePaths.add(selectedFile
-							.getAbsolutePath());
+					filePaths.add(selectedFile.getAbsolutePath());
 				}
 			}
 		};
-		screenObjects.add(video);
-		
-		ImageButton setKey = new ImageButton(parent, "Set Key", 290,
-				550, 100, 25, 1) {
+
+		screenObjects.add(blank);
+
+		ImageButton setKey = new ImageButton(parent, "Set Key", 195, 550, 100,
+				25, 1) {
 			@Override
 			public void onMousePress(int x, int y) {
 				isSettingKey = true;
 			}
-		}; 
+		};
 		screenObjects.add(setKey);
-		
-		ImageButton save = new ImageButton(parent, "Save Collection", 410,
-				550, 100, 25, 1) {
+
+		ImageButton save = new ImageButton(parent, "Save Collection", 315, 550,
+				100, 25, 1) {
 			@Override
 			public void onMousePress(int x, int y) {
 				parent.addCollection(newCollection);
 			}
 		};
 		screenObjects.add(save);
-
 
 	}
 
@@ -403,12 +378,12 @@ public class SettingsMenu {
 
 	public void setKey(char key) {
 		if (selectedPath != null) {
-			
+
 			System.out.println(key + " = " + selectedPath);
-			
+
 			newCollection.set((int) key, selectedPath);
 		}
-		
+
 		isSettingKey = false;
 	}
 
@@ -420,23 +395,19 @@ public class SettingsMenu {
 		stopCollectionTab();
 		stopMainTab();
 		stopKeyboardTab();
-
-		
 	}
 
 	private void stopMainTab() {
 
-		
 	}
 
 	private void stopKeyboardTab() {
-		
+
 	}
 
 	private void stopCollectionTab() {
 		removeImageButton("New Collection");
 		removeImageButton("Edit Collection");
 		stopCreatingCollection();
-		
 	}
 }

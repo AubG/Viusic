@@ -81,18 +81,34 @@ public class ScreenManager {
 				screenWidth);
 
 		// :: SETTING UP BUTTONS ::
-		// Collection button
-		cp5.addButton("Collections").setLabelVisible(false)
-				.setColorBackground(50)
-				.setColorActive(parent.color(150, 150, 150))
-				.setPosition(screenWidth - 201, screenHeight - 39)
-				.setSize(200, 39).setVisible(true);
-		// Record button
-		cp5.addButton("record").setLabelVisible(false).setColorBackground(50)
-				.setColorActive(parent.color(255, 0, 0))
-				.setPosition((screenWidth / 2) - 25, screenHeight - 35)
-				.setSize(50, 30).setVisible(true);
-
+		
+		// Collection Menu button
+		// Opens collection menu (Bottom right)
+		ImageButton collections = new ImageButton(parent, "Collections", parent.screenWidth - 200, parent.screenHeight - 40, 200, 40, 1){
+			@Override
+			public void onMousePress(int x, int y){
+				if(drawingCollectionMenu)
+					drawingCollectionMenu = false;
+				else
+					drawingCollectionMenu = true;
+			}
+		};
+		screenObjects.add(collections);
+		
+		// Record Button / currently recording indicator
+		ImageButton recordButton = new ImageButton(parent, "REC", parent.screenWidth/2 - 20, parent.screenHeight - 30, 40, 20, 1){
+			@Override
+			public void onMousePress(int x, int y){
+				sndM.toggleRecord();
+				
+				if(sndM.getIsRecording())
+					this.setColor(200, 50, 50);
+				else
+					this.setColor(175, 175, 175);
+			}
+		};
+		screenObjects.add(recordButton);
+		
 		// Setting up start time text field
 		parent.cp5
 				.addTextfield("start time")
@@ -416,16 +432,28 @@ public class ScreenManager {
 				}
 			}
 		};
+		
 		//Set number for later and add to screenObjects
 		loopImage.setNumber(loopNum);
+		
+		//Added for loop deletion
+		sndM.getLoop(loopNum - 1).setLoopButton(loopImage);
+		
+		
 		screenObjects.add(loopImage);
 
 	}
+	
+	//Not exactly working properly yet
+	public void removeLoop(Loop loop){
+		screenObjects.remove(screenObjects.indexOf(loop.getLoopButton()));
+	}
+	
 	//Initiates the loop menu
 	public void loopMenu(Loop loop, int i) {
 		
 		loopMenuOpen = true;
-		loopMenu = new LoopMenu(parent, this, loop, i);
+		loopMenu = new LoopMenu(parent, this, sndM, loop, i);
 	}
 	
 	//Passes the loop menu a value and the button that triggered the change
@@ -440,4 +468,17 @@ public class ScreenManager {
 	public void setLoopMenuOpen(boolean input) {
 		loopMenuOpen = input;
 	}
+
+	public void toggleRecord() {
+		for(ImageButton button : screenObjects){
+			if(button.getText().equals("REC")){
+				if(sndM.getIsRecording())
+					button.setColor(200,50,50);
+				else 
+					button.setColor(175,175,175);
+			}
+		}
+	}
+
+
 }

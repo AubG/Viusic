@@ -104,8 +104,12 @@ public class ViusicMain extends PApplet {
 			/*
 			 * Plays sound on keyPressed no sounds played when in menus
 			 */
-			if (key == 32) {
+			if (key == 32 && !sm.getIsDrawingCollectionMenu()
+					&& !sm.getIsDrawingSettingsMenu()
+					&& !sm.getIsLoopMenuOpen()) {
+				
 				sndM.toggleRecord();
+				sm.toggleRecord();
 				return;
 			}
 
@@ -171,21 +175,20 @@ public class ViusicMain extends PApplet {
 				}
 			}
 		}
-
 	}
 
-	//
 	@Override
 	public void mouseReleased(MouseEvent event) {
 		sm.mouseReleased(event.getX(), event.getY());
 	}
 
+	
 	public void drawUI() {
 		background(rand1, rand2, rand3);
 
 		videoM.draw();
-
-		sm.drawButtonIndicators(0);
+		
+//		sm.drawButtonIndicators(0);
 
 		if (sm.getIsDrawingCollectionMenu())
 			sm.drawCollectionMenu();
@@ -198,13 +201,14 @@ public class ViusicMain extends PApplet {
 		sm.updateObjects(timePassed);
 	}
 
+	
 	public void drawUI(int key) {
 		background(rand1, rand2, rand3);
 
 		videoM.draw();
 
 		// Draws button indicators
-		sm.drawButtonIndicators(key);
+//		sm.drawButtonIndicators(key);
 
 		// Draws collection menu
 		if (sm.getIsDrawingCollectionMenu())
@@ -219,6 +223,7 @@ public class ViusicMain extends PApplet {
 		sm.updateObjects(timePassed);
 	}
 
+	
 	/*
 	 * Receives events from all controlP5 controllers event.getName() returns
 	 * name of controller which had an event
@@ -249,7 +254,6 @@ public class ViusicMain extends PApplet {
 				sm.drawSettingsMenu();
 			} else {
 				// Fix the settings menu
-				// sm.resetSettingsMenu();
 				sm.setIsDrawingSettingsMenu(false);
 			}
 			break;
@@ -260,20 +264,23 @@ public class ViusicMain extends PApplet {
 		case "end time":
 			sm.passToLoopMenu("end time", event.getStringValue());
 			break;
-		case "collectionName":
+		case "enter collection name":
 			sm.passName(event.getStringValue());
 		}
 	}
 
+	
 	public int getDeltaTime() {
 		return timePassed;
 	}
 
+	
 	public void movieEvent(Movie m) {
 		m.read();
 	}
 
 	// Sets the currentCollection
+	
 	public void setCurrentCollection(int index) {
 
 		currentCollectionIndex = index;
@@ -283,26 +290,31 @@ public class ViusicMain extends PApplet {
 	}
 
 	// Gets the currentCollection
+	
 	public Collection<Integer, String> getCurrentCollection() {
 
 		return collections.get(currentCollectionIndex);
 	}
 
 	// Returns length of collection ArrayList
+	
 	public int getCollectionLength() {
 		return collections.size();
 	}
 
 	// Returns collection at given index from the ArrayList
+	
 	public Collection<Integer, String> getCollection(int index) {
 		return collections.get(index);
 	}
 
+	
 	public void addCollection(Collection<Integer, String> c) {
 
 		collections.add(c);
 	}
 
+	
 	public ArrayList<Collection<Integer, String>> getCollections() {
 		return collections;
 	}

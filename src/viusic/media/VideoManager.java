@@ -5,28 +5,44 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import processing.core.PConstants;
 import processing.video.Movie;
+import viusic.effects.Tint.Tint;
 import viusic.main.ViusicMain;
 
 public class VideoManager {
 
 	private HashMap<Integer, Movie> videos;
 	ArrayList<Integer> playingVideoKeys;
+	ArrayList<Integer> stoppedVideoKeys;
 	ViusicMain parent;
+	
+	Tint tint;
 	
 	//Initialize the videos HashMap, the playing video Keys
 	public VideoManager(ViusicMain parent) {
 		videos = new HashMap<Integer, Movie>();
 		playingVideoKeys = new ArrayList<Integer>();
+		stoppedVideoKeys = new ArrayList<Integer>();
 		this.parent = parent;
-
+		
+		// Only call this setup(); if using triggerable videoEffects
+//		setup();
+	}
+	
+	// Only contains video effect setup
+	public void setup(){
+		// initialize Tint values
+		tint = new Tint(parent, PConstants.HSB, 255, 75, 255, 100);
 	}
 	
 	//Called every frame to play the video
 	public void draw(){
 		for(int i = 0; i < playingVideoKeys.size(); i++){
+			
 			//plays the video image at a time
-			parent.image(videos.get(playingVideoKeys.get(i)), 0, 0);
+			if(!stoppedVideoKeys.contains(playingVideoKeys.get(i)))
+				parent.image(videos.get(playingVideoKeys.get(i)), 0, 0); 
 		}
 	}
 
@@ -34,11 +50,19 @@ public class VideoManager {
 	public boolean playVideo(Integer key, boolean fromUser) {
 		
 		if(videos.containsKey(key)){
-			videos.get(key).play();
-			return true;
+			
+			if(!stoppedVideoKeys.contains(key)){
+				videos.get(key).pause();;
+				stoppedVideoKeys.add(key);
+				return true;
+			} else {
+				videos.get(key).loop();
+				stoppedVideoKeys.remove(key);
+				return true;
+			}
 		}
 		
-		//Sorry no video founde
+		//Returns false if no video was found
 		return false;
 	}
 
@@ -69,6 +93,7 @@ public class VideoManager {
 	        	//pushes another video into the videos HashMap
 	        	videos.put((Integer)pairs.getKey(), new Movie(parent, fileName));
 	        	playingVideoKeys.add((Integer)pairs.getKey());
+	        	stoppedVideoKeys.add((Integer)pairs.getKey());
 	        }
 	        // avoids a ConcurrentModificationException
 	        // also destroys our hashmap and causes everything to be null

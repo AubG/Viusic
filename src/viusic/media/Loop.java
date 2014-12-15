@@ -2,6 +2,7 @@ package viusic.media;
 
 import java.util.ArrayList;
 
+import viusic.UI.ImageButton;
 import ddf.minim.AudioPlayer;
 
 public class Loop {
@@ -13,6 +14,7 @@ public class Loop {
 	private int beginTime;
 	private boolean soundToggled = false;
 	private ArrayList<AudioPlayer> audioPlayers;
+	private ImageButton loopButton;
 	
 	public Loop(){
 		times = new ArrayList<Integer>();
@@ -103,5 +105,12 @@ public class Loop {
 		return soundToggled;
 	}
 	
+	public void setLoopButton(ImageButton loopButton){
+		this.loopButton = loopButton;
+	}
+	
+	public ImageButton getLoopButton(){
+		return loopButton;
+	}
 
 }

@@ -30,7 +30,7 @@ public class TestTint extends PApplet
 	public void draw () 
 	{	
 		image(img, 0, 0);
-		tint.draw();
+		tint.draw(true);
 		
 		// transparency offset
 		image(img, 15, 0);

@@ -28,6 +28,7 @@ public class ImageButton {
 	private boolean buttonMode;
 	private int number;
 	private int r, g, b;
+	private int index;
 	public ImageButton(ViusicMain main, String text, int x, int y, int width, int height,
 			float scale) {
 		init(main, text, null, x, y, width, height, scale);

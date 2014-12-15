@@ -35,7 +35,7 @@ public class DefaultCollectionSetup {
 		piano.set((int) 'y', cwd + "/viusic/data/piano/piano_6.wav");
 		piano.set((int) 'u', cwd + "/viusic/data/piano/piano_7.wav");
 		piano.set((int) 'i', cwd + "/viusic/data/piano/piano_8.wav");
-		piano.set((int) 'o', cwd + "/viusic/data/piano/piano_9.wav");
+		piano.set((int) 'o', cwd + "/viusic/data/piano/transit.mov");
 		piano.set((int) 'p', cwd + "/viusic/data/piano/piano_10.wav");
 		piano.set((int) '[', cwd + "/viusic/data/piano/piano_11.wav");
 		piano.set((int) ']', cwd + "/viusic/data/piano/piano_12.wav");
