@@ -1,9 +1,11 @@
 package viusic.media;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import viusic.UI.ImageButton;
 import ddf.minim.AudioPlayer;
+import ddf.minim.Minim;
 
 public class Loop {
 	private ArrayList<Integer> times;
@@ -13,13 +15,19 @@ public class Loop {
 	private float scale;
 	private int beginTime;
 	private boolean soundToggled = false;
-	private ArrayList<AudioPlayer> audioPlayers;
+	//private ArrayList<AudioPlayer> audioPlayers;
+	private HashMap<Integer, String> sounds;
+	private HashMap<Integer, Integer> keyTimes;
 	private ImageButton loopButton;
+	private Minim min;
 	
-	public Loop(){
+	public Loop(Minim m){
+		min = m;
 		times = new ArrayList<Integer>();
 		keys = new ArrayList<Integer>();
-		audioPlayers = new ArrayList<AudioPlayer>();
+		//audioPlayers = new ArrayList<AudioPlayer>();
+		sounds = new HashMap<Integer, String>();
+		keyTimes = new HashMap<Integer, Integer>();
 		scale = 1;
 		
 	}
@@ -31,8 +39,9 @@ public class Loop {
 	}
 	
 	//Sends in a audio player
-	public void passInput(AudioPlayer audioPlayer, int currentTime) {
-		audioPlayers.add(audioPlayer);
+	public void passInput(String filePath, Integer key, int currentTime) {
+		sounds.put(key, filePath);
+		keyTimes.put(currentTime, key);
 		times.add(currentTime);
 		
 	}
@@ -76,7 +85,11 @@ public class Loop {
 			//If this index's time is between last frames time
 			//and now, add it to the sounds to be played
 			if(time >= lastTime && time < currentTime){
-				audioPlayers.get(i).play(0);
+				
+				//Stuff happening
+				Integer key = keyTimes.get(time);
+				AudioPlayer temp = min.loadFile(sounds.get(key));
+				temp.play();
 			}
 		}
 		

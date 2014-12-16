@@ -130,7 +130,7 @@ public class ViusicMain extends PApplet {
 			}
 
 			// key pressed and not in any menus
-			if (key != CODED && !sm.getIsDrawingCollectionMenu()
+			if (key != CODED  && !sm.getIsDrawingCollectionMenu()
 					&& !sm.getIsDrawingSettingsMenu()
 					&& !sm.getIsLoopMenuOpen()) {
 

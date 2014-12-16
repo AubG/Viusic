@@ -100,13 +100,20 @@ public class SettingsMenu {
 		parent.fill(100);
 		parent.rect(posX, posY, 540.0f, (float) (screenHeight - posY));
 
+		/*
+		 * Draws the transition from no settings menu to fully up Logic for
+		 * transition is in this first if the else handles drawing everything
+		 * post animation
+		 */
 		if (posY >= screenHeight - screenHeight / 1.2f)
 			posY -= (screenHeight / 1.2f) / 15.0f;
 		else {
 
+			// Draws tabs for selection
 			drawTabs();
 
 			// Switching between tabs
+			// MAINTAB SELECTED
 			if (mainTab) {
 
 			} else if (collectionTab) {
@@ -114,48 +121,8 @@ public class SettingsMenu {
 				// If edit or new has been pressed
 				if (creatingCollection) {
 
-					// Drawing Textfield for colletion name
-					cp5.getController("enter collection name").setPosition(posX + 36,
-							posY + 100);
-					cp5.getController("enter collection name").setVisible(true);
-
-					// Prints name of current Collection
-					parent.fill(255);
-					parent.textAlign(PConstants.CENTER);
-					parent.text(newCollection.getCollectionName(), posX + 438,
-							posY + 117);
-
-					// Draws file paths in window
-					parent.stroke(0);
-					parent.fill(225);
-					parent.rect(posX + 35, posY + 150, 470, 300);
-
-					// Putting Paths into Databox (Name subject to change)
-					float start = posY + 167;
-					int count = 0;
-					Integer tempKey;
-					for (String path : filePaths) {
-
-						if (indexSelected == count) {
-							parent.noStroke();
-							parent.fill(190);
-							parent.rect(posX + 36, posY + 150 + count * (25),
-									469, 25);
-						}
-
-						parent.textAlign(PConstants.LEFT);
-						parent.fill(0);
-						parent.text(path, posX + 40, start + count * (25));
-
-						tempKey = newCollection.getKey(path);
-						if (tempKey != null) {
-							parent.textAlign(PConstants.CENTER);
-							parent.text("" + (char) tempKey.intValue(),
-									posX + 470, start + count * (25));
-						}
-
-						count++;
-					}
+					// Draw collection creation stuff
+					drawCollectionCreation();
 
 				} else if (editingCollection) {
 
@@ -164,14 +131,69 @@ public class SettingsMenu {
 					} else {
 						// If no collection selected draw the collection
 						// selection menu
+						drawEditCollectionSelection();
 					}
 				}
-			} else if (keyboardTab) {
 
-			} else {
+				// KEYBOARDTAB SELECTED
+			} else if (keyboardTab) {
 
 			}
 		}
+	}
+
+	// Draws collection creation stuff
+	private void drawCollectionCreation() {
+
+		// Drawing Textfield for colletion name
+		cp5.getController("enter collection name").setPosition(posX + 36,
+				posY + 100);
+		cp5.getController("enter collection name").setVisible(true);
+
+		// Prints name of current Collection
+		parent.fill(255);
+		parent.textAlign(PConstants.CENTER);
+		parent.text(newCollection.getCollectionName(), posX + 438, posY + 117);
+
+		// Draws file paths in window
+		parent.stroke(0);
+		parent.fill(225);
+		parent.rect(posX + 35, posY + 150, 470, 300);
+
+		// Putting Paths into Databox (Name subject to change)
+		float start = posY + 167;
+		int count = 0;
+		Integer tempKey;
+		for (String path : filePaths) {
+
+			if (indexSelected == count) {
+				parent.noStroke();
+				parent.fill(190);
+				parent.rect(posX + 36, posY + 150 + count * (25), 469, 25);
+			}
+
+			parent.textAlign(PConstants.LEFT);
+			parent.fill(0);
+			parent.text(path, posX + 40, start + count * (25));
+
+			tempKey = newCollection.getKey(path);
+			if (tempKey != null) {
+				parent.textAlign(PConstants.CENTER);
+				parent.text("" + (char) tempKey.intValue(), posX + 470, start
+						+ count * (25));
+			}
+
+			count++;
+		}
+
+	}
+
+	// Draws edit collection selection
+	private void drawEditCollectionSelection() {
+		// Draws collection window
+		parent.stroke(0);
+		parent.fill(225);
+		parent.rect(posX + 35, posY + 150, 470, 300);
 	}
 
 	// Draws tabs at top of menu
@@ -247,7 +269,7 @@ public class SettingsMenu {
 		if (mainTab) {
 
 		} else if (collectionTab) {
-			
+
 			// Checking if path selected
 			float start = posY + 150;
 			int count = 0;
@@ -276,7 +298,6 @@ public class SettingsMenu {
 	}
 
 	private void startKeyboardTab() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -300,8 +321,8 @@ public class SettingsMenu {
 		};
 		screenObjects.add(collectionButton);
 
-		screenObjects.add(new ImageButton(parent, "Edit Collection", (int) (posX + 280), 140,
-				200, 25, 1) {
+		screenObjects.add(new ImageButton(parent, "Edit Collection",
+				(int) (posX + 280), 140, 200, 25, 1) {
 			@Override
 			public void onMousePress(int x, int y) {
 				super.onMousePress(x, y);

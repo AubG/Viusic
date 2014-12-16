@@ -20,6 +20,7 @@ public class SoundManager {
 	Minim min;
 	AudioPlayer player;
 	private HashMap<Integer, AudioPlayer> sounds;
+	private HashMap<Integer, String> noPreload;
 	
 	private boolean recording;
 
@@ -35,24 +36,26 @@ public class SoundManager {
 		loops = new ArrayList<Loop>();
 		
 		sounds = new HashMap<Integer, AudioPlayer>();
+		noPreload = new HashMap<Integer, String>();
 	}
 
 	public void playSound(int key, boolean fromUser) {
 		
 		// for building a new loop
 		if (fromUser && recording) {
-			currentLoop.passInput(sounds.get((int)key), currentTime);
+			
+			//For fuck preload (FIX THIS SHIT) *********************************************
+			currentLoop.passInput(noPreload.get((Integer)key), key, currentTime);
 		}
 		
 		// attempt to load audio resource
 		try {
 			
-			//Setup timestamps to find duration of iteration
+			//Non-Preloaded hashmap
+			AudioPlayer temp = min.loadFile(noPreload.get((Integer)key));
+			temp.play();
 			
-			// Get sound from above path, play sound
-			sounds.get((int)key).play(0);	
 		} catch (Exception e) {
-			
 			// catch failed attempt
 			System.out.println(e.getMessage());
 		}
@@ -61,6 +64,7 @@ public class SoundManager {
 
 	public void grabAudio(Collection currentCollection) {
 		sounds.clear();
+		noPreload.clear();
 
 		Iterator it = currentCollection.getMedia().entrySet().iterator();
 		while (it.hasNext()) {
@@ -73,7 +77,8 @@ public class SoundManager {
 				
 				// attempt to load audio resource
 				try {
-					sounds.put((Integer)pairs.getKey(), min.loadFile(fileName));
+					
+					noPreload.put((Integer)pairs.getKey(), fileName);
 				} 
 				catch (Exception e) {
 					// catch failed load 
@@ -91,7 +96,7 @@ public class SoundManager {
 	}
 
 	private boolean fileIsAudiofileName(String fileName) {
-		if(fileName.endsWith("MP3") || fileName.endsWith("mp3") || fileName.endsWith(".wav") || fileName.endsWith(".WAV")){
+		if(fileName.endsWith(".MP3") || fileName.endsWith(".mp3") || fileName.endsWith(".wav") || fileName.endsWith(".WAV")){
 			System.out.println("Sound found " + fileName);
 			return true;
 		}
@@ -118,7 +123,7 @@ public class SoundManager {
 		} else {
 			if (loops.size() < 4) {
 				currentTime = 0;
-				currentLoop = new Loop();
+				currentLoop = new Loop(min);
 				recording = true;
 				System.out.println("Recording Started");
 			}

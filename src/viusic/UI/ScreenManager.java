@@ -84,7 +84,7 @@ public class ScreenManager {
 		
 		// Collection Menu button
 		// Opens collection menu (Bottom right)
-		ImageButton collections = new ImageButton(parent, "Collections", parent.screenWidth - 200, parent.screenHeight - 40, 200, 40, 1){
+		ImageButton collections = new ImageButton(parent, "Collections", parent.screenWidth - 201, parent.screenHeight - 40, 200, 40, 1){
 			@Override
 			public void onMousePress(int x, int y){
 				if(drawingCollectionMenu)
@@ -313,8 +313,8 @@ public class ScreenManager {
 			tempY = (initialY - i * (40));
 
 			// Drawing button
-			parent.stroke(255);
-			parent.fill(0);
+			parent.stroke(0);
+			parent.fill(100);
 			parent.smooth();
 			parent.rect(tempX, tempY, 200, 40);
 
