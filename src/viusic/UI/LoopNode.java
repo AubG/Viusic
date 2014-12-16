@@ -43,6 +43,8 @@ public class LoopNode {
 		System.out.println(time);
 		if(x < startX){
 			x = startX;
+		}else if(x > startX + distance){
+			x = startX + distance;
 		}
 		rect.x = x;
 		
