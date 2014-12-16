@@ -17,7 +17,6 @@ public class Loop {
 	private boolean soundToggled = false;
 	//private ArrayList<AudioPlayer> audioPlayers;
 	private HashMap<Integer, String> sounds;
-	private HashMap<Integer, Integer> keyTimes;
 	private ImageButton loopButton;
 	private Minim min;
 	
@@ -27,7 +26,6 @@ public class Loop {
 		keys = new ArrayList<Integer>();
 		//audioPlayers = new ArrayList<AudioPlayer>();
 		sounds = new HashMap<Integer, String>();
-		keyTimes = new HashMap<Integer, Integer>();
 		scale = 1;
 		
 	}
@@ -44,8 +42,8 @@ public class Loop {
 	//Sends in a audio player
 	public void passInput(String filePath, Integer key, int currentTime) {
 		sounds.put(key, filePath);
-		keyTimes.put(currentTime, key);
 		times.add(currentTime);
+		keys.add(key);
 		
 	}
 	public void setEndTime(int endTime){
@@ -88,9 +86,8 @@ public class Loop {
 			//If this index's time is between last frames time
 			//and now, add it to the sounds to be played
 			if(time >= lastTime && time < currentTime){
-				System.out.println(time +" Loop class");
 				//Stuff happening
-				Integer key = keyTimes.get(time);
+				Integer key = keys.get(i);
 				AudioPlayer temp = min.loadFile(sounds.get(key));
 				temp.play();
 			}
@@ -102,10 +99,7 @@ public class Loop {
 
 	}
 	public void setNewTime(int index, int newTime){
-		
-		int keyNumber = keyTimes.get(times.get(index));
-		keyTimes.remove(times.get(index));
-		keyTimes.put(newTime, keyNumber);
+	
 		times.set(index, newTime);
 	}
 	public ArrayList<Integer> getTimes(){
@@ -133,6 +127,18 @@ public class Loop {
 	
 	public ImageButton getLoopButton(){
 		return loopButton;
+	}
+	public void deleteIndex(int index) {
+		System.out.println("beginning" + keys.size());
+
+		times.remove(index);
+		keys.remove(index);
+		System.out.println("middle" + keys.size());
+		keys.trimToSize();
+		times.trimToSize();
+		System.out.println("end" + keys.size());
+
+		
 	}
 
 }
