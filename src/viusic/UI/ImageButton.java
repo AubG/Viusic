@@ -29,6 +29,7 @@ public class ImageButton {
 	private int number;
 	private int r, g, b;
 	private int index;
+	private int numLoops;
 	public ImageButton(ViusicMain main, String text, int x, int y, int width, int height,
 			float scale) {
 		init(main, text, null, x, y, width, height, scale);
@@ -37,14 +38,19 @@ public class ImageButton {
 
 	// timeBtwnImages in milliseconds = 1 second / 1000
 	public ImageButton(ViusicMain main, String buttonName,
-			ArrayList<PImage> animation, int timeBtwnImages, int x, int y,
+			ArrayList<PImage> animation, int numLoops, int timeBtwnImages, int x, int y,
 			int width, int height, float scale) {
 		// Send in image to be evaluated
 		PImage[] image = { animation.get(0), animation.get(0), animation.get(0) };
 		init(main, buttonName, image, x, y, width, height, scale);
 
+		if(numLoops < 0)
+			this.looping = true;
+		this.numLoops = numLoops;
+		this.animation = animation;
 		animating = true; // For update() won't animate unless animating = true
 		this.timeBtwnImages = timeBtwnImages;
+		buttonMode = true;
 	}
 		
 	// For traditional button functionality
@@ -67,7 +73,7 @@ public class ImageButton {
 
 	//
 	private void init(ViusicMain main, String buttonName,
-			PImage[] buttonImages, int x, int y, int width, int height,
+			PImage[] buttonImages,  int x, int y, int width, int height,
 			float scale) {
 		// Variables for controlling size
 		this.main = main;
@@ -88,7 +94,25 @@ public class ImageButton {
 		bounds = new Rectangle(x, y, (int) (width * this.scale),
 				(int) (height * this.scale));
 	}
-
+	/**
+	 * To infinite loop animation, set numLoops to -1
+	 * @param numLoops
+	 */
+	public void startAnimation(int numLoops){
+		this.animating = true;
+		currentIndex = 0;
+		stateTime = 0;
+		this.numLoops = numLoops;
+	}
+	public void stopAnimation(boolean buttonMode){
+		this.animating = false;
+		this.buttonMode = buttonMode;
+		currentIndex = 0;
+		stateTime = 0;
+	}
+	public void setAnimation(ArrayList<PImage> animation){
+		this.animation = animation;
+	}
 	
 
 	// mouse event handlers
@@ -113,7 +137,7 @@ public class ImageButton {
 					currentIndex = 1;
 
 			}
-		} else if (buttonMode)
+		} else if (buttonMode && !animating)
 			currentIndex = 0;
 
 		return false;
@@ -149,16 +173,20 @@ public class ImageButton {
 		if (animating) {
 			// Cycles through each image in animation
 			while (stateTime > timeBtwnImages) {
+
 				stateTime -= timeBtwnImages;
 				currentIndex++;
+				
+				if (currentIndex >= images.length) {
+					onAnimationComplete();
+					
+				}
 
 				// Calculate width of image
 				width = (int) (animation.get(currentIndex).width);
 				height = (int) (animation.get(currentIndex).height);
 			}
-			if (currentIndex >= images.length) {
-				onAnimationComplete();
-			}
+
 			main.image(animation.get(currentIndex), x, y, width * scale, height
 					* scale);
 			// Traditional Button Rendering
@@ -181,18 +209,21 @@ public class ImageButton {
 	// When animation completes, either restart or just go back to first image
 	// of animation
 	private void onAnimationComplete() {
-
+		currentIndex = 0;
+		
+		if(numLoops > 0){
+			numLoops--;
 		// Set animating to false
-		if (!looping) {
+		}else if (numLoops == 0) {
 			animating = false;
-
+			System.out.println("aoetusaoethu");
 		}
 		animationCompletion();
 	}
 
 	// Override on object level for individualized
 	// behavior after animation completes
-	private void animationCompletion() {
+	public void animationCompletion() {
 
 	}
 

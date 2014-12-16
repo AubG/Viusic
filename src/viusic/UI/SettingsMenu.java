@@ -27,7 +27,7 @@ public class SettingsMenu {
 
 	// Collection Authoring Variables
 	Collection<Integer, String> newCollection;
-	ArrayList<ImageButton> screenObjects;
+	ScreenManager screenManager;
 	ArrayList<String> filePaths = new ArrayList<>();
 	boolean creatingCollection = false;
 	boolean editingCollection = false;
@@ -40,11 +40,11 @@ public class SettingsMenu {
 	private boolean selectedCollection;
 
 	SettingsMenu(ViusicMain p, SoundManager s,
-			ArrayList<ImageButton> screenObjects, int height, int width) {
+			ScreenManager screenManager, int height, int width) {
 
 		// PApplet and SoundManager instance
 		parent = p;
-		this.screenObjects = screenObjects;
+		this.screenManager = screenManager;
 		sndM = s;
 
 		// Screen Size constants
@@ -319,9 +319,9 @@ public class SettingsMenu {
 
 			}
 		};
-		screenObjects.add(collectionButton);
+		screenManager.addButton(collectionButton);
 
-		screenObjects.add(new ImageButton(parent, "Edit Collection",
+		screenManager.addButton(new ImageButton(parent, "Edit Collection",
 				(int) (posX + 280), 140, 200, 25, 1) {
 			@Override
 			public void onMousePress(int x, int y) {
@@ -335,26 +335,16 @@ public class SettingsMenu {
 
 	public void stopCreatingCollection() {
 		if (creatingCollection) {
-			removeImageButton("Add File");
-			removeImageButton("Set Key");
-			removeImageButton("Save Collection");
+			screenManager.removeImageButton("Add File");
+			screenManager.removeImageButton("Set Key");
+			screenManager.removeImageButton("Save Collection");
 			cp5.getController("enter collection name").setVisible(false);
 		}
 
 		creatingCollection = false;
 	}
 
-	public boolean removeImageButton(String name) {
-		for (ImageButton button : screenObjects) {
-			if (button.getText() == name) {
-				screenObjects.remove(button);
-				return true;
-			}
-		}
-
-		return false;
-	}
-
+	
 	private void setUpCollectionMenu() {
 		ImageButton blank = new ImageButton(parent, "Add File", 75, 550, 100,
 				25, 1) {
@@ -371,7 +361,7 @@ public class SettingsMenu {
 			}
 		};
 
-		screenObjects.add(blank);
+		screenManager.addButton(blank);
 
 		ImageButton setKey = new ImageButton(parent, "Set Key", 195, 550, 100,
 				25, 1) {
@@ -380,7 +370,7 @@ public class SettingsMenu {
 				isSettingKey = true;
 			}
 		};
-		screenObjects.add(setKey);
+		screenManager.addButton(setKey);
 
 		ImageButton save = new ImageButton(parent, "Save Collection", 315, 550,
 				100, 25, 1) {
@@ -389,7 +379,7 @@ public class SettingsMenu {
 				parent.addCollection(newCollection);
 			}
 		};
-		screenObjects.add(save);
+		screenManager.addButton(save);
 
 	}
 
@@ -427,8 +417,8 @@ public class SettingsMenu {
 	}
 
 	private void stopCollectionTab() {
-		removeImageButton("New Collection");
-		removeImageButton("Edit Collection");
+		screenManager.removeImageButton("New Collection");
+		screenManager.removeImageButton("Edit Collection");
 		stopCreatingCollection();
 	}
 }
