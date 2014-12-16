@@ -57,27 +57,45 @@ public class ScreenManager {
 		// current working directory
 		cwd = System.getProperty("user.dir");
 		
+	
+		
+
 		//Getting Images
-		PImage [] images = { 
+		ArrayList<PImage> images = new ArrayList<PImage>();
+		for(int i = 0; i < 4; i++){
+			images.add(parent.loadImage(cwd + "/Viusic/data/images/settings_gear_" + i + ".png"));
+		}
+		/*{ 
 			parent.loadImage(cwd + "/Viusic/data/images/settings_gear.png"), //Image 1
 			parent.loadImage(cwd + "/Viusic/data/images/settings_gear.png"), //Image 2
 			parent.loadImage(cwd + "/Viusic/data/images/settings_gear.png") //Image 3 
-		};
+		};*/
 		
-		
-		screenObjects.add(new ImageButton(parent, images, "gear", 5, screenHeight - 35, 1){
+		ImageButton gear = new ImageButton(parent, "gear", images, 3, 150, 5, screenHeight - 35, 33, 32, 1){
 			@Override
 			public void onMousePress(int x, int y) {
-				if (!getIsDrawingSettingsMenu())
+				if (!getIsDrawingSettingsMenu()){
 					setIsDrawingSettingsMenu(true);
-				else
+					startAnimation(4);
+				}else{
 					setIsDrawingSettingsMenu(false);
+					stopAnimation(true);
+					startAnimation(4);
+				}
 
 			}
-		});
+			
+			
+			
+		};
+		gear.stopAnimation(true);
+		
+		//Adds the gear. 
+		screenObjects.add(gear);
+
 
 		// Creating Settings menu
-		setMenu = new SettingsMenu(parent, sndM, screenObjects, screenHeight,
+		setMenu = new SettingsMenu(parent, sndM, this, screenHeight,
 				screenWidth);
 
 		// :: SETTING UP BUTTONS ::
@@ -125,6 +143,10 @@ public class ScreenManager {
 						(int) (ViusicMain.screenHeight / 1.45f) + 50)
 				.setSize(150, 25).setVisible(false);
 	}
+	
+	public void addButton(ImageButton button){
+		screenObjects.add(button);
+	}
 
 	public void passName(String input) {
 		setMenu.setNewCollectionName(input);
@@ -135,6 +157,18 @@ public class ScreenManager {
 		sndM = s;
 		setMenu.setSoundManager(s);
 	}
+	
+	public boolean removeImageButton(String name) {
+		for (ImageButton button : screenObjects) {
+			if (button.getText() == name) {
+				screenObjects.remove(button);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 
 	public void drawHomeBar() {
 		// Setting up HomeBar
