@@ -416,12 +416,22 @@ public class ScreenManager {
 		for (ImageButton obj : screenObjects) {
 			obj.mouseReleased(mouseX, mouseY);
 		}
+		
+		if(loopMenuOpen){
+			loopMenu.mouseRelease(mouseX, mouseY);
+			
+		}
 	}
 
 	//Called in ViusicMain draw(), Each object checks if mouse's over
 	public void mousePosition(int mouseX, int mouseY) {
 		for (ImageButton obj : screenObjects) {
 			obj.mouseOver(mouseX, mouseY);
+		}
+		
+		if(loopMenuOpen){
+			loopMenu.mouseDrag(mouseX, mouseY);
+			
 		}
 	}
 	

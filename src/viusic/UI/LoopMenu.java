@@ -15,6 +15,9 @@ public class LoopMenu {
 	private int loopNum;
 	
 	private ArrayList<ImageButton> controlButtons;
+	private ArrayList<LoopNode> graphedInputs;
+	private boolean movingInputTime;
+	private LoopNode node;
 
 	public LoopMenu(ViusicMain parent, ScreenManager sm, SoundManager sound, Loop loop, int loopNum) {
 		this.loop = loop;
@@ -24,7 +27,7 @@ public class LoopMenu {
 		this.sndM = sound;
 		
 		controlButtons = new ArrayList<ImageButton>();
-		
+		graphedInputs = new ArrayList<LoopNode>();
 		initButtons();
 	}
 	
@@ -85,6 +88,12 @@ public class LoopMenu {
 		controlButtons.add(close);
 		controlButtons.add(deleteLoop);
 		
+		ArrayList<Integer> times = loop.getTimes();
+		for(int i = 0; i < times.size(); i++){
+			graphedInputs.add(new LoopNode(parent, i, times.get(i), loop.getEndTime(),
+					controlButtons.get(0).getX() + 40, controlButtons.get(2).getY() + 75, 320));
+		}
+		
 		//Setting text fields to visible
 		parent.cp5.getController("start time").setVisible(true);
 		parent.cp5.getController("end time").setVisible(true);
@@ -107,8 +116,36 @@ public class LoopMenu {
 		for(ImageButton imgs : controlButtons){
 			imgs.mousePressed(x, y);
 		}
+		
+		
+		for(LoopNode node : graphedInputs){
+			
+			if(node.mouseClicked(x, y)){
+				movingInputTime = true;
+				this.node = node;
+				System.out.println(node);
+			}
+		}
+	}
+	public void mouseDrag(int x, int y){
+		if(movingInputTime){
+			node.setPosition(x);
+		}
+		
 	}
 	
+	public void mouseRelease(int x, int y){
+		
+		if(movingInputTime){
+		movingInputTime = false;
+		
+		ArrayList<Integer> times = loop.getTimes();
+		loop.setNewTime(node.getIndex(), (int) node.getTime());
+		//times.set(node.getIndex(), (int) node.getTime());
+		System.out.println(times.size());
+		}
+
+	}
 	public void update(int deltaTime){
 		if(!sm.getIsLoopMenuOpen()){
 			hide();
@@ -124,12 +161,12 @@ public class LoopMenu {
 	private void drawLoopLine() {
 		parent.noStroke();
 		parent.fill(0);
-		parent.rect(controlButtons.get(0).getX() + 40, controlButtons.get(2).getY() + 75, 320, 5);
+		parent.rect(controlButtons.get(0).getX() + 40, controlButtons.get(2).getY() + 80, 320, 5);
 		
-		ArrayList<Integer> tempTimes = loop.getTimes();
-		for(Integer note : tempTimes){
+	/*	ArrayList<Integer> tempTimes = loop.getTimes();
+		for(LoopNode node : graphedInputs){
 			
-			float distance = 350.0f * ((float) note / (float)loop.getEndTime());
+			float distance = 320.0f * ((float) note / (float)loop.getEndTime());
 			
 			parent.stroke(0);
 			parent.fill(0,0,100);
@@ -140,7 +177,12 @@ public class LoopMenu {
 			parent.fill(0);
 			parent.textAlign(PConstants.CENTER);
 			parent.text(time, (controlButtons.get(0).getX() + 40) + distance, controlButtons.get(2).getY() + 97);
+		}u*/
+		for(LoopNode node : graphedInputs){
+			node.draw();
 		}
+
+		
 	}
 
 	public void setValue(String button, String stringValue) {

@@ -37,6 +37,9 @@ public class Loop {
 	public float getScale(){
 		return scale;
 	}
+	public int getSize(){
+		return keys.size();
+	}
 	
 	//Sends in a audio player
 	public void passInput(String filePath, Integer key, int currentTime) {
@@ -85,7 +88,7 @@ public class Loop {
 			//If this index's time is between last frames time
 			//and now, add it to the sounds to be played
 			if(time >= lastTime && time < currentTime){
-				
+				System.out.println(time +" Loop class");
 				//Stuff happening
 				Integer key = keyTimes.get(time);
 				AudioPlayer temp = min.loadFile(sounds.get(key));
@@ -98,7 +101,13 @@ public class Loop {
 			currentTime = beginTime;
 
 	}
-	
+	public void setNewTime(int index, int newTime){
+		
+		int keyNumber = keyTimes.get(times.get(index));
+		keyTimes.remove(times.get(index));
+		keyTimes.put(newTime, keyNumber);
+		times.set(index, newTime);
+	}
 	public ArrayList<Integer> getTimes(){
 		return times;
 	}
