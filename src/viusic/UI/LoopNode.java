@@ -79,4 +79,8 @@ public class LoopNode {
 		return index;
 	}
 
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
 }

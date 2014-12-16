@@ -47,6 +47,25 @@ public class LoopMenu {
 			}
 		};
 		
+		ImageButton deleteLoopnode = new ImageButton(parent, "delete node", backPane.getX(), scale.getY() + 30, 60, 20, 1){
+			
+			@Override
+			public void onMousePress(int x, int y) {
+				
+				if(node != null){
+					loop.deleteIndex(node.getIndex());
+					graphedInputs.remove(node.getIndex());
+					for(int i = node.getIndex(); i < graphedInputs.size(); i++){
+						LoopNode temp = graphedInputs.get(i);
+						temp.setIndex(temp.getIndex() - 1);
+					}
+					node = null;
+				
+				
+				}
+			}
+		};
+		
 		ImageButton leftIncrement = new ImageButton(parent, "-", scale.getX() - 30, scale.getY() + 5, 25, 15, 1){
 			@Override
 			public void onMousePress(int x, int y) {
@@ -84,6 +103,7 @@ public class LoopMenu {
 		controlButtons.add(title);
 		controlButtons.add(scale);
 		controlButtons.add(leftIncrement);
+		controlButtons.add(deleteLoopnode);
 		controlButtons.add(rightIncrement);
 		controlButtons.add(close);
 		controlButtons.add(deleteLoop);
