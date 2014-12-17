@@ -55,7 +55,7 @@ public class ViusicMain extends PApplet {
 
 	public void setup() {
 		size(screenWidth, screenHeight);
-		frameRate(40);
+		frameRate(60);
 
 		// Initializing screenManager object, passing in PApplet and cp5
 		cp5 = new ControlP5(this);
@@ -98,7 +98,6 @@ public class ViusicMain extends PApplet {
 	}
 
 	public void keyPressed() {
-
 		// attempt to load audio resources
 		try {
 			/*
