@@ -314,7 +314,9 @@ public class SettingsMenu {
 				mainTab = true;
 				collectionTab = false;
 				keyboardTab = false;
-
+				editingCollection = false;
+				selectingCollection = false;
+				
 				stopCollectionTab();
 				stopKeyboardTab();
 				startMainTab();
@@ -336,6 +338,8 @@ public class SettingsMenu {
 				mainTab = false;
 				collectionTab = false;
 				keyboardTab = true;
+				editingCollection = false;
+				selectingCollection = false;
 
 				stopCollectionTab();
 				stopMainTab();
