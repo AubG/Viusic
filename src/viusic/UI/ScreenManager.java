@@ -149,7 +149,7 @@ public class ScreenManager {
 	}
 
 	public void passName(String input) {
-		setMenu.setNewCollectionName(input);
+		setMenu.setCollectionName(input);
 	}
 
 	//Setter menu

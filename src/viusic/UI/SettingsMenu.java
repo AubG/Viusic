@@ -46,6 +46,7 @@ public class SettingsMenu {
 	private boolean selectingCollection = false;
 	private boolean collectionSelected = false;
 	private boolean editingCollection = false;
+	private int keyToSet;
 
 	SettingsMenu(ViusicMain p, SoundManager s, ScreenManager screenManager,
 			int height, int width) {
@@ -98,8 +99,12 @@ public class SettingsMenu {
 	}
 
 	// Where text field input arrives
-	public void setNewCollectionName(String input) {
-		newCollection.setCollectionName(input);
+	public void setCollectionName(String input) {
+		if(editingCollection){
+			selectedCollection.setCollectionName(input);
+		} else {
+			newCollection.setCollectionName(input);
+		}
 	}
 
 	// Draws everything setting menu related
@@ -412,7 +417,6 @@ public class SettingsMenu {
 	}
 
 	private void startMainTab() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -486,7 +490,12 @@ public class SettingsMenu {
 				100, 25, 1) {
 			@Override
 			public void onMousePress(int x, int y) {
-				System.out.println("Pressed the Delete, shieeet");
+				if(collectionSelected){
+					if(selectedCollection.equals(parent.getCurrentCollection())){
+						parent.setCurrentCollection(0);
+					}
+					parent.removeCollection(selectedCollection);
+				}
 			}
 		};
 
@@ -524,7 +533,7 @@ public class SettingsMenu {
 			public void onMousePress(int x, int y) {
 				// Add logic to delete specified file (media)
 				// get remove key from collection and thus removes that filePaths
-				
+				selectedCollection.delete(selectedKey);
 			}
 		};
 
@@ -533,6 +542,7 @@ public class SettingsMenu {
 			@Override
 			public void onMousePress(int x, int y) {
 				isSettingKey = true;
+				
 			}
 		};
 
@@ -540,7 +550,8 @@ public class SettingsMenu {
 				435, 550, 100, 25, 1) {
 			@Override
 			public void onMousePress(int x, int y) {
-				parent.addCollection(newCollection);
+				parent.removeCollection(selectedCollection);
+				parent.addCollection(selectedCollection);
 			}
 		};
 
@@ -564,7 +575,10 @@ public class SettingsMenu {
 		}
 		// Removes everything!
 		else {
-
+			screenManager.removeImageButton("Save Collection");
+			screenManager.removeImageButton("Set Key");
+			screenManager.removeImageButton("Add File");
+			screenManager.removeImageButton("Delete File");
 			screenManager.removeImageButton("Edit collection");
 			screenManager.removeImageButton("Delete collection");
 			cp5.getController("enter collection name").setVisible(false);
@@ -621,11 +635,14 @@ public class SettingsMenu {
 	}
 
 	public void setKey(char key) {
-		if (selectedPath != null) {
+		if (selectedPath != null && !editingCollection) {
 
 			System.out.println(key + " = " + selectedPath);
 
 			newCollection.set((int) key, selectedPath);
+		} else {
+			System.out.println("Setting key to a file in " + selectedCollection.getCollectionName());
+			selectedCollection.changeKey(selectedKey, (int)key, selectedPath);
 		}
 
 		isSettingKey = false;
@@ -636,6 +653,16 @@ public class SettingsMenu {
 	}
 
 	public void stopSetMenu() {
+		
+		mainTab = true;
+		collectionTab = false;
+		keyboardTab = false;
+		creatingCollection = false;
+		isSettingKey = false;
+		selectingCollection = false;
+		collectionSelected = false;
+		editingCollection = false;
+		
 		stopCollectionTab();
 		stopMainTab();
 		stopKeyboardTab();

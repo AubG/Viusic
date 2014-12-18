@@ -281,7 +281,7 @@ public class ViusicMain extends PApplet {
 	// Sets the currentCollection
 	
 	public void setCurrentCollection(int index) {
-
+		
 		currentCollectionIndex = index;
 
 		videoM.grabVideos(collections.get(currentCollectionIndex));
@@ -309,8 +309,11 @@ public class ViusicMain extends PApplet {
 
 	
 	public void addCollection(Collection<Integer, String> c) {
-
 		collections.add(c);
+	}
+	
+	public void removeCollection(Collection<Integer, String> c){
+		collections.remove(c);
 	}
 
 	

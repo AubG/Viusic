@@ -36,6 +36,10 @@ public class Collection<Integer, String> {
 	public void set(Integer key, String value) {
 		media.put(key, value);
 	}
+	
+	public void delete(Integer key){
+		media.remove(key);
+	}
 
 	public void changeKey(Integer oldKey, Integer newKey, String value) {
 		media.remove(oldKey);
