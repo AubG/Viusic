@@ -150,7 +150,7 @@ public class SettingsMenu {
 
 				// KEYBOARDTAB SELECTED
 			} else if (keyboardTab) {
-
+				drawKeyboardInfo();
 			}
 		}
 	}
@@ -232,14 +232,14 @@ public class SettingsMenu {
 				parent.rect(posX + 36, posY + 150 + count * (25), 469, 25);
 
 				selectedPath = (String) (pairs.getValue());
-				selectedKey = (pairs.getKey() instanceof String) ? (Integer)Integer.parseInt((String) pairs.getKey()) : (Integer) pairs.getKey();
+				selectedKey = (pairs.getKey() instanceof String) ? Integer.parseInt((String) pairs.getKey()) : (Integer) pairs.getKey();
 			}
 
 			parent.textAlign(PConstants.LEFT);
 			parent.fill(0);
 			parent.text(fileName, posX + 40, start + count * (25));
 
-			tempKey = (pairs.getKey() instanceof String) ? (Integer)Integer.parseInt((String) pairs.getKey()) : (Integer) pairs.getKey();
+			tempKey = (pairs.getKey() instanceof String) ? Integer.parseInt((String) pairs.getKey()) : (Integer) pairs.getKey();
 			if (tempKey != null) {
 				parent.textAlign(PConstants.CENTER);
 				parent.text("" + (char) tempKey.intValue(), posX + 470, start
@@ -302,6 +302,10 @@ public class SettingsMenu {
 		parent.text("Keyboard", posX + 450, posY + 17);
 	}
 
+	private void drawKeyboardInfo(){
+		
+	}
+		
 	// Checks for mouse position when clicked in settings menu
 	public void tabsClickCheck(int mouseX, int mouseY) {
 
@@ -422,6 +426,29 @@ public class SettingsMenu {
 		}
 	}
 
+	public boolean getIsSettingKey() {
+		return isSettingKey;
+	}
+
+	public void setKey(char key) {
+		if (selectedPath != null && !editingCollection) {
+
+			System.out.println(key + " = " + selectedPath);
+
+			newCollection.set((int) key, selectedPath);
+		} else {
+			System.out.println("Setting key to a file in "
+					+ selectedCollection.getCollectionName());
+			selectedCollection.changeKey(selectedKey, (int) key, selectedPath);
+		}
+
+		isSettingKey = false;
+	}
+
+	public void setSoundManager(SoundManager s) {
+		this.sndM = s;
+	}
+
 	private void startMainTab() {
 
 	}
@@ -464,17 +491,6 @@ public class SettingsMenu {
 				startCollectionSelection();
 			}
 		});
-	}
-
-	public void stopCreatingCollection() {
-		if (creatingCollection) {
-			screenManager.removeImageButton("Add File");
-			screenManager.removeImageButton("Set Key");
-			screenManager.removeImageButton("Save Collection");
-			cp5.getController("enter collection name").setVisible(false);
-		}
-
-		creatingCollection = false;
 	}
 
 	private void startCollectionSelection() {
@@ -530,7 +546,6 @@ public class SettingsMenu {
 					System.out.println("Selected file: "
 							+ selectedFile.getAbsolutePath());
 					selectedCollection.set((Integer) 1, (String)selectedFile.getAbsolutePath());
-					indexSelected = -1;
 				}
 			}
 		};
@@ -542,7 +557,6 @@ public class SettingsMenu {
 				// Add logic to delete specified file (media)
 				// get remove key from collection and thus removes that
 				// filePaths
-				System.out.println(selectedKey);
 				selectedCollection.delete((Integer) selectedKey);
 				indexSelected = -1;
 			}
@@ -553,7 +567,6 @@ public class SettingsMenu {
 			@Override
 			public void onMousePress(int x, int y) {
 				isSettingKey = true;
-
 			}
 		};
 
@@ -570,33 +583,6 @@ public class SettingsMenu {
 		screenManager.addButton(deleteFile);
 		screenManager.addButton(setKey);
 		screenManager.addButton(saveCollection);
-	}
-
-	private void stopEditingCollection() {
-
-		// Removes collection edit selection stuff
-		if (selectingCollection && editingCollection) {
-
-			screenManager.removeImageButton("Edit collection");
-			screenManager.removeImageButton("Delete collection");
-		}
-		// Remove editingCollection stuff
-		else if (!editingCollection && selectingCollection) {
-			cp5.getController("enter collection name").setVisible(false);
-		}
-		// Removes everything!
-		else {
-			screenManager.removeImageButton("Save Collection");
-			screenManager.removeImageButton("Set Key");
-			screenManager.removeImageButton("Add File");
-			screenManager.removeImageButton("Delete File");
-			screenManager.removeImageButton("Edit collection");
-			screenManager.removeImageButton("Delete collection");
-			cp5.getController("enter collection name").setVisible(false);
-			selectingCollection = false;
-			collectionSelected = false;
-			editingCollection = false;
-		}
 	}
 
 	private void setUpCollectionMenu() {
@@ -639,31 +625,8 @@ public class SettingsMenu {
 		cp5.getController("enter collection name").setPosition(posX + 36,
 				posY + 100);
 		cp5.getController("enter collection name").setVisible(true);
-	}
-
-	public boolean getIsSettingKey() {
-		return isSettingKey;
-	}
-
-	public void setKey(char key) {
-		if (selectedPath != null && !editingCollection) {
-
-			System.out.println(key + " = " + selectedPath);
-
-			newCollection.set((int) key, selectedPath);
-		} else {
-			System.out.println("Setting key to a file in "
-					+ selectedCollection.getCollectionName());
-			selectedCollection.changeKey(selectedKey, (int) key, selectedPath);
-		}
-
-		isSettingKey = false;
-	}
-
-	public void setSoundManager(SoundManager s) {
-		this.sndM = s;
-	}
-
+	}		
+	
 	public void stopSetMenu() {
 
 		mainTab = true;
@@ -693,5 +656,43 @@ public class SettingsMenu {
 		screenManager.removeImageButton("Edit Collection");
 		stopCreatingCollection();
 		stopEditingCollection();
+	}
+
+	private void stopEditingCollection() {
+
+		// Removes collection edit selection stuff
+		if (selectingCollection && editingCollection) {
+
+			screenManager.removeImageButton("Edit collection");
+			screenManager.removeImageButton("Delete collection");
+		}
+		// Remove editingCollection stuff
+		else if (!editingCollection && selectingCollection) {
+			cp5.getController("enter collection name").setVisible(false);
+		}
+		// Removes everything!
+		else {
+			screenManager.removeImageButton("Save Collection");
+			screenManager.removeImageButton("Set Key");
+			screenManager.removeImageButton("Add File");
+			screenManager.removeImageButton("Delete File");
+			screenManager.removeImageButton("Edit collection");
+			screenManager.removeImageButton("Delete collection");
+			cp5.getController("enter collection name").setVisible(false);
+			selectingCollection = false;
+			collectionSelected = false;
+			editingCollection = false;
+		}
+	}
+
+	public void stopCreatingCollection() {
+		if (creatingCollection) {
+			screenManager.removeImageButton("Add File");
+			screenManager.removeImageButton("Set Key");
+			screenManager.removeImageButton("Save Collection");
+			cp5.getController("enter collection name").setVisible(false);
+		}
+
+		creatingCollection = false;
 	}
 }

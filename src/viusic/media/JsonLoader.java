@@ -66,7 +66,7 @@ public class JsonLoader {
 		} catch (FileNotFoundException e) {
 			
 			initializeProfile();
-			System.out.println("oauhsnaotouaoeusaoeus");
+			System.out.println("Profile Initialized");
 		}
 		
 		try {

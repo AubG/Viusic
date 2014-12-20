@@ -119,18 +119,23 @@ public class ViusicMain extends PApplet {
 
 			// User presses numbers 1 - 4 to toggle the loop playback.
 			switch (key) {
+			// Numerical key 1
 			case 49:
 				sndM.getLoop(0).soundToggle();
 				return;
+			// Numerical key 2
 			case 50:
 				sndM.getLoop(1).soundToggle();
 				return;
+			// Numerical key 3
 			case 51:
 				sndM.getLoop(2).soundToggle();
 				return;
+			// Numerical key 4	
 			case 52:
 				sndM.getLoop(3).soundToggle();
 				return;
+			// Numerical key 5
 			case 53:
 				loader.saveProfile();
 				return;
