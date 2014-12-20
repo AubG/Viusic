@@ -27,7 +27,7 @@ public class JsonLoader {
 		System.out.println(main.getCollections());
 
 		try {
-			reader = new BufferedReader(new FileReader("saveData/saveFile.json"));
+			reader = new BufferedReader(new FileReader("../src/saveData/saveFile.json"));
 			readAndBuild();
 		} catch (FileNotFoundException e) {
 			
@@ -41,7 +41,7 @@ public class JsonLoader {
 	
 	private void initializeProfile() {
 		System.out.println("Initializing the file");
-		File file = new File("saveData/saveFile.json");
+		File file = new File("../src/saveData/saveFile.json");
 		try {
 			writer = new PrintWriter(file);
 		} catch (FileNotFoundException e) {
@@ -62,7 +62,7 @@ public class JsonLoader {
 			profile = new Profile();
 		}
 		try {
-			reader = new BufferedReader(new FileReader("saveData/saveFile.json"));
+			reader = new BufferedReader(new FileReader("../src/saveData/saveFile.json"));
 		} catch (FileNotFoundException e) {
 			
 			initializeProfile();
@@ -88,7 +88,7 @@ public class JsonLoader {
 		String fileContent = json.toJson(profile);
 		System.out.println(fileContent + " aoeuoe");
 		
-		File file = new File("saveData/saveFile.json");
+		File file = new File("../src/saveData/saveFile.json");
 		try {
 			writer = new PrintWriter(file);
 		} catch (FileNotFoundException e) {
