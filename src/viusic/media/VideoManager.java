@@ -72,6 +72,7 @@ public class VideoManager {
 	 * @param currentCollection
 	 */
 	public void grabVideos(Collection<Integer, String> currentCollection) {
+		
 		videos.clear();
 		playingVideoKeys.clear();
 		
@@ -87,13 +88,20 @@ public class VideoManager {
 	        //Assures this file is a video
 	        if(fileIsVideo(fileName)){
 	        	
+	        	int temp = 0;
+				if(pairs.getKey() instanceof String){
+					System.out.println("astring");
+					temp = Integer.parseInt((String) pairs.getKey());
+				}else{
+					temp = (Integer)pairs.getKey();
+					System.out.println(pairs.getKey());
+				}
 	        	System.out.println("We have infact found a movie");
-	        	System.out.println(pairs.getKey() + " = " + pairs.getValue());
 	        	
 	        	//pushes another video into the videos HashMap
-	        	videos.put((Integer)pairs.getKey(), new Movie(parent, fileName));
-	        	playingVideoKeys.add((Integer)pairs.getKey());
-	        	stoppedVideoKeys.add((Integer)pairs.getKey());
+	        	videos.put(temp, new Movie(parent, fileName));
+	        	playingVideoKeys.add(temp);
+	        	stoppedVideoKeys.add(temp);
 	        }
 	        // avoids a ConcurrentModificationException
 	        // also destroys our hashmap and causes everything to be null

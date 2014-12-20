@@ -15,16 +15,18 @@ public class Loop {
 	private float scale;
 	private int beginTime;
 	private boolean soundToggled = false;
-	//private ArrayList<AudioPlayer> audioPlayers;
 	private HashMap<Integer, String> sounds;
 	private ImageButton loopButton;
 	private Minim min;
+	
+	public Loop(){
+		
+	}
 	
 	public Loop(Minim m){
 		min = m;
 		times = new ArrayList<Integer>();
 		keys = new ArrayList<Integer>();
-		//audioPlayers = new ArrayList<AudioPlayer>();
 		sounds = new HashMap<Integer, String>();
 		scale = 1;
 		

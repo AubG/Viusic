@@ -67,6 +67,7 @@ public class SoundManager {
 		noPreload.clear();
 
 		Iterator it = currentCollection.getMedia().entrySet().iterator();
+		
 		while (it.hasNext()) {
 			Map.Entry pairs = (Map.Entry) it.next();
 
@@ -77,12 +78,20 @@ public class SoundManager {
 				
 				// attempt to load audio resource
 				try {
+					int temp = 0;
+					if(pairs.getKey() instanceof String){
+						System.out.println("astring");
+						temp = Integer.parseInt((String) pairs.getKey());
+					}else{
+						temp = (Integer)pairs.getKey();
+						System.out.println(pairs.getKey());
+					}
 					
-					noPreload.put((Integer)pairs.getKey(), fileName);
+					noPreload.put(temp, fileName);
 				} 
 				catch (Exception e) {
 					// catch failed load 
-					System.out.println(e.getMessage());
+					//System.out.println(e.getMessage());
 				}
 				
 			}
@@ -139,7 +148,7 @@ public class SoundManager {
 		currentTime += deltaTime;
 
 		for (Loop curLoop : loops) {
-
+			if(curLoop != null)
 			curLoop.getSoundsToPlay(deltaTime);
  
 		}
@@ -153,5 +162,14 @@ public class SoundManager {
 	
 	public void deleteLoop(int loopNum) {
 		loops.remove(loopNum);
+	}
+
+	public void setLoops(ArrayList<Loop> loops) {
+		this.loops = loops;
+	}
+
+	public ArrayList<Loop> getLoops() {
+		// TODO Auto-generated method stub
+		return loops;
 	}
 }
