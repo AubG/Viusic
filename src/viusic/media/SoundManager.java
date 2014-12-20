@@ -34,7 +34,6 @@ public class SoundManager {
 		min = m;
 		sm = s;
 		loops = new ArrayList<Loop>();
-		
 		sounds = new HashMap<Integer, AudioPlayer>();
 		noPreload = new HashMap<Integer, String>();
 	}

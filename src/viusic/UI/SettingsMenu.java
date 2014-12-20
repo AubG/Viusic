@@ -38,7 +38,6 @@ public class SettingsMenu {
 	int indexSelected = -1;
 	float posX, posY, screenHeight, screenWidth;
 	int currentPageNumber;
-	
 
 	boolean mainTab = true, collectionTab = false, keyboardTab = false;
 	private boolean creatingCollection = false;
@@ -100,7 +99,7 @@ public class SettingsMenu {
 
 	// Where text field input arrives
 	public void setCollectionName(String input) {
-		if(editingCollection){
+		if (editingCollection) {
 			selectedCollection.setCollectionName(input);
 		} else {
 			newCollection.setCollectionName(input);
@@ -231,16 +230,16 @@ public class SettingsMenu {
 				parent.noStroke();
 				parent.fill(190);
 				parent.rect(posX + 36, posY + 150 + count * (25), 469, 25);
-				
-				selectedPath = (String)(pairs.getValue());
-				selectedKey = (Integer)(pairs.getKey());
+
+				selectedPath = (String) (pairs.getValue());
+				selectedKey = (pairs.getKey() instanceof String) ? (Integer)Integer.parseInt((String) pairs.getKey()) : (Integer) pairs.getKey();
 			}
 
 			parent.textAlign(PConstants.LEFT);
 			parent.fill(0);
 			parent.text(fileName, posX + 40, start + count * (25));
 
-			tempKey = (Integer) pairs.getKey();
+			tempKey = (pairs.getKey() instanceof String) ? (Integer)Integer.parseInt((String) pairs.getKey()) : (Integer) pairs.getKey();
 			if (tempKey != null) {
 				parent.textAlign(PConstants.CENTER);
 				parent.text("" + (char) tempKey.intValue(), posX + 470, start
@@ -316,7 +315,7 @@ public class SettingsMenu {
 				keyboardTab = false;
 				editingCollection = false;
 				selectingCollection = false;
-				
+
 				stopCollectionTab();
 				stopKeyboardTab();
 				startMainTab();
@@ -376,23 +375,26 @@ public class SettingsMenu {
 			}
 			// EDITTING COLLECTION, COLLECTION SELECTION
 			else {
-				
-				//Selecting file from collection edit
+
+				// Selecting file from collection edit
 				if (editingCollection) {
-					
+
 					float start = posY + 150;
-					for (int i = 0; i < selectedCollection.getCollectionLength(); i++) {
+					for (int i = 0; i < selectedCollection
+							.getCollectionLength(); i++) {
 
 						if (mouseY > start + i * (25)
 								&& mouseY < start + (i) * (25) + 25) {
 							if (mouseX > posX + 35 && mouseX < posX + 505) {
-								
+
 								indexSelected = i;
 								break;
 							}
 						}
 					}
-				} 
+					
+					
+				}
 				// Selecting collection from collection selection menus
 				else {
 
@@ -494,8 +496,9 @@ public class SettingsMenu {
 				100, 25, 1) {
 			@Override
 			public void onMousePress(int x, int y) {
-				if(collectionSelected){
-					if(selectedCollection.equals(parent.getCurrentCollection())){
+				if (collectionSelected) {
+					if (selectedCollection
+							.equals(parent.getCurrentCollection())) {
 						parent.setCurrentCollection(0);
 					}
 					parent.removeCollection(selectedCollection);
@@ -526,7 +529,8 @@ public class SettingsMenu {
 					File selectedFile = jfile.getSelectedFile();
 					System.out.println("Selected file: "
 							+ selectedFile.getAbsolutePath());
-					filePaths.add(selectedFile.getAbsolutePath());
+					selectedCollection.set((Integer) 1, (String)selectedFile.getAbsolutePath());
+					indexSelected = -1;
 				}
 			}
 		};
@@ -536,8 +540,11 @@ public class SettingsMenu {
 			@Override
 			public void onMousePress(int x, int y) {
 				// Add logic to delete specified file (media)
-				// get remove key from collection and thus removes that filePaths
-				selectedCollection.delete(selectedKey);
+				// get remove key from collection and thus removes that
+				// filePaths
+				System.out.println(selectedKey);
+				selectedCollection.delete((Integer) selectedKey);
+				indexSelected = -1;
 			}
 		};
 
@@ -546,7 +553,7 @@ public class SettingsMenu {
 			@Override
 			public void onMousePress(int x, int y) {
 				isSettingKey = true;
-				
+
 			}
 		};
 
@@ -645,8 +652,9 @@ public class SettingsMenu {
 
 			newCollection.set((int) key, selectedPath);
 		} else {
-			System.out.println("Setting key to a file in " + selectedCollection.getCollectionName());
-			selectedCollection.changeKey(selectedKey, (int)key, selectedPath);
+			System.out.println("Setting key to a file in "
+					+ selectedCollection.getCollectionName());
+			selectedCollection.changeKey(selectedKey, (int) key, selectedPath);
 		}
 
 		isSettingKey = false;
@@ -657,7 +665,7 @@ public class SettingsMenu {
 	}
 
 	public void stopSetMenu() {
-		
+
 		mainTab = true;
 		collectionTab = false;
 		keyboardTab = false;
@@ -666,7 +674,7 @@ public class SettingsMenu {
 		selectingCollection = false;
 		collectionSelected = false;
 		editingCollection = false;
-		
+
 		stopCollectionTab();
 		stopMainTab();
 		stopKeyboardTab();
