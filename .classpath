@@ -13,5 +13,7 @@
 	<classpathentry kind="lib" path="jna.jar"/>
 	<classpathentry kind="lib" path="video.jar"/>
 	<classpathentry kind="lib" path="gstreamer-java.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Joey/Documents/GitHub/Viusic/json-lib-2.4-jdk15.jar"/>
+	<classpathentry kind="lib" path="gdx.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

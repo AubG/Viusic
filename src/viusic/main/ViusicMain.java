@@ -2,13 +2,15 @@ package viusic.main;
 
 import java.util.ArrayList;
 import java.util.Random;
+
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 import processing.video.Movie;
-import viusic.UI.LoopMenu;
 import viusic.UI.ScreenManager;
 import viusic.media.Collection;
 import viusic.media.DefaultCollectionSetup;
+import viusic.media.JsonLoader;
+import viusic.media.Loop;
 import viusic.media.SoundManager;
 import viusic.media.VideoManager;
 import controlP5.ControlEvent;
@@ -34,11 +36,11 @@ public class ViusicMain extends PApplet {
 	DefaultCollectionSetup dcS;
 
 	// ArrayList to store all collections
-	ArrayList<Collection<Integer, String>> collections;
+	public ArrayList<Collection<Integer, String>> collections;
 
 	// Holds currentCollection
 	Collection<Integer, String> currentCollection;
-	int currentCollectionIndex = 0;
+	public int currentCollectionIndex = 0;
 
 	// ControlP5
 	public ControlP5 cp5;
@@ -53,6 +55,8 @@ public class ViusicMain extends PApplet {
 	// Movie Testing
 	boolean playing;
 
+	
+	JsonLoader loader;
 	public void setup() {
 		size(screenWidth, screenHeight);
 		frameRate(60);
@@ -74,6 +78,7 @@ public class ViusicMain extends PApplet {
 
 		// Setting first default currentCollection
 		setCurrentCollection(0);
+		loader = new JsonLoader(this);
 	}
 
 	public void draw() {
@@ -125,6 +130,9 @@ public class ViusicMain extends PApplet {
 				return;
 			case 52:
 				sndM.getLoop(3).soundToggle();
+				return;
+			case 53:
+				loader.saveProfile();
 				return;
 			}
 
@@ -319,5 +327,14 @@ public class ViusicMain extends PApplet {
 	
 	public ArrayList<Collection<Integer, String>> getCollections() {
 		return collections;
+	}
+
+	public void setLoops(ArrayList<Loop> loops) {
+		sndM.setLoops(loops);
+	}
+
+	public ArrayList<Loop> getLoops() {
+		// TODO Auto-generated method stub
+		return sndM.getLoops();
 	}
 }

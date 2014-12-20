@@ -5,6 +5,9 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class Collection<Integer, String> {
+	public Collection(){
+		
+	}
 	private HashMap<Integer, String> media = new HashMap<Integer, String>();
 
 	// Collection Info
