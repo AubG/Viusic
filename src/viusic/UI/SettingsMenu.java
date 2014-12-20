@@ -304,6 +304,46 @@ public class SettingsMenu {
 
 	private void drawKeyboardInfo(){
 		
+		//Title
+		parent.fill(255);
+		parent.textAlign(PConstants.CENTER);
+		parent.textFont(parent.createFont("arial", 20), 20);
+		parent.text("Keyboard Bindings", posX + 270, posY + 75);
+		
+		
+		
+		//Outline for keyboard chart
+		parent.stroke(0);
+		parent.fill(225);
+		parent.rect(posX + 180, posY + 100, 3, 250);
+		parent.rect(posX + 20, posY + 97, 500, 3);
+		parent.rect(posX + 20, posY + 350, 500, 3);
+		
+		//Text setup
+		parent.fill(255);
+		parent.textAlign(PConstants.CENTER);
+		parent.textFont(parent.createFont("arial", 14), 14);
+		
+		float start = (float)(posY + 125);
+		int count = 0;
+		
+		parent.text("1, 2, 3, 4",posX + 90, start + count*(50));
+		count++;
+		
+		parent.text("5",posX + 90, start + count*(50));
+		count++;
+		
+		parent.text("7, 8, 9, 0",posX + 90, start + count*(50));
+		count++;
+		
+		parent.text("Homerow (ex: a, s, d, f)", posX + 90, start + count*(50));
+		count++;
+		
+		parent.text("Spacebar",posX + 90, start + count*(50));
+		count++;
+		
+		//Resetting font size
+		parent.textFont(parent.createFont("arial", 12), 12);
 	}
 		
 	// Checks for mouse position when clicked in settings menu
