@@ -337,4 +337,9 @@ public class ViusicMain extends PApplet {
 		// TODO Auto-generated method stub
 		return sndM.getLoops();
 	}
+
+	//Called on program exit
+	public void stop(){
+		loader.saveProfile();
+	}
 }
